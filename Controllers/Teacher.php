@@ -361,7 +361,7 @@ class Teacher {
   }
 
   public function actualizarExercise($id) {
-    $btnOption = "crear";
+    
     if (isset($_POST['submit'])) {
       unset($_POST['submit']);
       $information["title"] = $_POST['title'];
@@ -371,14 +371,14 @@ class Teacher {
       }
       unset($_POST['description']);
 
-      $exerciseInformation = $this->model->exerciseInformation("*", "id='".$id."'");
+      $exerciseInfo = $this->model->exerciseInformation("*", "id='".$id."'");
       if (isset($_POST['checkbox'])) {
         $information["img"] = "";
         unset($_POST['checkbox']);
         //Eliminamos la imagen del servidor
-        if ($exerciseInformation['img'] != NULL) {
+        if ($exerciseInfo['img'] != NULL) {
           $img_folder = IMG."exercise/";
-          $target_file = $img_folder.$exerciseInformation['img'];
+          $target_file = $img_folder.$exerciseInfo['img'];
           if (file_exists($target_file)) {
             unlink($target_file);
           }
@@ -389,9 +389,9 @@ class Teacher {
         $img_type = strtolower($img['type']);
         if ($img['error'] == 0) {
           //Eliminamos la imagen del servidor
-          if ($exerciseInformation['img'] != NULL) {
+          if ($exerciseInfo['img'] != NULL) {
             $img_folder = IMG."exercise/";
-            $target_file = $img_folder.$exerciseInformation['img'];
+            $target_file = $img_folder.$exerciseInfo['img'];
             if (file_exists($target_file)) {
               unlink($target_file);
             }
@@ -415,26 +415,58 @@ class Teacher {
 
       $information["type"] = $_POST['type'];
       unset($_POST['type']);
-      if ($this->model->exerciseUpdate($information)) {
+      if ($this->model->exerciseUpdate($information, "id='".$id."'")) {
         $msg_alert .= '<div class="alert alert-success msg-alert">';
         $msg_alert .= 'Ejercicio actualizado <strong>EXITOSAMENTE</strong></div>';
 
-        $exercise = $this->model->exerciseInformation("*", "title='".$information['title']."'");
-        $exerciseID = $exercise['id'];
         if($information["type"] == "completar") {
+          //Eliminar las respuestas antiguas
+          $this->model->responsesDelete("exercise='".$id."'");
           $largo = (count($_POST) / 2);
           for ($i=0; $i < $largo; $i++) { 
-            $responses["exercise"] = $exerciseID;
+            $responses["exercise"] = $id;
             $responses["description"] = $_POST['completar-p-'.$i];
             $responses["solution"] = $_POST['completar-s-'.$i];
-            $this->model->responsesRegister($responses);
+            if($responses["description"] != "" && $responses["solution"] != "") {
+              $this->model->responsesRegister($responses);
+            }
           }
         }
       } else {
         $msg_alert = '<div class="alert alert-danger msg-alert">';
-        $msg_alert .= '<strong>ERROR CE1:</strong> error al crear el ejercicio en la base de datos</div>';
+        $msg_alert .= '<strong>ERROR CE1:</strong> error al actualizar el ejercicio en la base de datos</div>';
       }
+      $btnOption = "crear";
+      $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+      require_once HEAD;
+      require_once VIEWS.'Teacher/header.php';
+      require_once VIEWS.'Teacher/exercise.php';
+      require_once FOOT;
+    } else {
+      header('Location: '.URL);
+    }
+  }
 
+  public function borrarExercise($id) {
+    if (isset($_POST['submit'])) {
+      $exerciseInfo = $this->model->exerciseInformation("*", "id='".$id."'");
+      //Eliminamos la imagen del servidor
+      if ($exerciseInfo['img'] != NULL) {
+        $img_folder = IMG."exercise/";
+        $target_file = $img_folder.$exerciseInfo['img'];
+        if (file_exists($target_file)) {
+          unlink($target_file);
+        }
+      }
+      $this->model->responsesDelete("exercise='".$id."'");
+      if ($this->model->exerciseDelete("id='".$id."'")) {
+        $msg_alert .= '<div class="alert alert-success msg-alert">';
+        $msg_alert .= 'Ejercicio eliminado <strong>EXITOSAMENTE</strong></div>';
+      } else {
+        $msg_alert = '<div class="alert alert-danger msg-alert">';
+        $msg_alert .= '<strong>ERROR DE1:</strong> error al eliminar el ejercicio en la base de datos</div>';
+      }
+      $btnOption = "crear";
       $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
       require_once HEAD;
       require_once VIEWS.'Teacher/header.php';

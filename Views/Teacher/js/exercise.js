@@ -14,7 +14,7 @@ $("#tiposEjercicio").change(function(){
 });
 
 var n = 1;
-$("#añadirOpcion").click(function(){
+$("#añadirOpcionCompletar").click(function(){
   var opcion = '<div class="opcionCompletar"><div class="form-group">';
   opcion += '<input class="form-control" type="text" required name="completar-p-'+n+'" placeholder="problema">';
   opcion += '</div><div class="form-group"><input class="form-control" type="text" required name="completar-s-'+n+'" placeholder="solución"></div></div>';
@@ -22,8 +22,8 @@ $("#añadirOpcion").click(function(){
   n++;
 });
 
-nResponses = $("#añadirOpcionActualizar").data("responses");
-$("#añadirOpcionActualizar").click(function(){
+nResponses = $("#añadirOpcionCompletarActualizar").data("responses");
+$("#añadirOpcionCompletarActualizar").click(function(){
   var opcion = '<div class="opcionCompletar"><div class="form-group">';
   opcion += '<input class="form-control" type="text" required name="completar-p-'+nResponses+'" placeholder="problema">';
   opcion += '</div><div class="form-group"><input class="form-control" type="text" required name="completar-s-'+nResponses+'" placeholder="solución"></div></div>';

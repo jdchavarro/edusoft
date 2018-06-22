@@ -72,5 +72,17 @@ class Teacher_model
   public function responsesRegister($array) {
     return $this->db->insert('responses', $array);
   }
+
+  public function exerciseUpdate($array, $where) {
+    return $this->db->update('exercises', $array, $where);
+  }
+
+  public function responsesDelete($where){
+    return $this->db->delete('responses', $where);
+  }
+
+  public function exerciseDelete($where) {
+    return $this->db->delete('exercises', $where);
+  }
 }
 ?>

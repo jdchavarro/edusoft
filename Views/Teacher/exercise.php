@@ -40,12 +40,12 @@
       <label for="name">Titulo del ejercicio</label>
       <input class="form-control" type="text" required name="title" placeholder="Ingrese titulo" 
       <?php 
+      if (isset($exerciseInformation)) { 
+        echo 'value="'.$exerciseInformation['title'].'"'; 
+      } 
       if ($btnOption == "borrar") { 
         echo 'disabled';
       } 
-      if (isset($exerciseInformation)) { 
-        echo 'value="'.$exerciseInformation['title'].'"'; 
-        } 
       ?>>
       </div>
 
@@ -93,15 +93,15 @@
         </select>
 
         <div id="divcompletar" class="responses">
-        <button type="button" id="añadirOpcion" class="btn btn-primary addOption">Añadir opciones</button>
+        <button type="button" id="añadirOpcionCompletar" class="btn btn-primary addOption">Añadir opciones</button>
         
         <div class="opcionCompletar">
         <!-- Opcion minima -->
         <div class="form-group">
-        <input class="form-control" type="text"required name="completar-p-0" placeholder="problema">
+        <input class="form-control" type="text" required name="completar-p-0" placeholder="problema">
         </div>
         <div class="form-group">
-        <input class="form-control" type="text"required name="completar-s-0" placeholder="solución">
+        <input class="form-control" type="text" required name="completar-s-0" placeholder="solución">
         </div>
         </div>
 
@@ -115,25 +115,43 @@
       <?php
       } elseif ($exerciseInformation['type'] == "completar") {
         ?>
-        <select class="form-control" disabled name="type">
+        <select class="form-control oculto" name="type">
         <option value="completar">Completar campos</option>
         </select>
 
         <div id="divcompletar" class="responses">
-        <button type="button" id="añadirOpcionActualizar" data-responses="<?php echo count($responsesInformation); ?>" class="btn btn-primary addOption">Añadir opciones</button>
+        <button type="button" id="añadirOpcionCompletarActualizar" data-responses="<?php echo count($responsesInformation); ?>" class="btn btn-primary addOption">Añadir opciones</button>
         
         <?php
+        $indicador = 1;
         foreach ($responsesInformation as $key => $response) {
           ?>
           <div class="opcionCompletar">
           <div class="form-group">
-          <input class="form-control" type="text"required name="completar-p-<?php echo $key; ?>" placeholder="problema" value="<?php echo $response['description']; ?>">
+          <input class="form-control" type="text" 
+          <?php 
+          if ($btnOption == "borrar") {
+            echo 'disabled';
+          } elseif($indicador == 1) { 
+            echo 'required';
+          } 
+          ?> 
+          name="completar-p-<?php echo $key; ?>" placeholder="problema" value="<?php echo $response['description']; ?>">
           </div>
           <div class="form-group">
-          <input class="form-control" type="text"required name="completar-s-<?php echo $key; ?>" placeholder="solución" value="<?php echo $response['solution']; ?>">
+          <input class="form-control" type="text" 
+          <?php 
+          if ($btnOption == "borrar") {
+            echo 'disabled';
+          } elseif($indicador == 1) { 
+            echo 'required';
+          } 
+          ?> 
+          name="completar-s-<?php echo $key; ?>" placeholder="solución" value="<?php echo $response['solution']; ?>">
           </div>
           </div>
           <?php
+          $indicador++;
         }
         ?>
         </div>
