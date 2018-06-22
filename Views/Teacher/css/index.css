@@ -1,0 +1,9 @@
+#welcomeMsg {
+  margin: -40px auto;
+  width: 1050px;
+  background-color: white;
+  padding-top: 80px;
+  padding-bottom: 20px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}

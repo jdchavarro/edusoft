@@ -1,0 +1,28 @@
+body {
+  background: none;
+}
+
+/* Formulario Login */
+#form-logIn {
+  background: white;
+  width: 300px;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 0 auto;
+  margin-top: 80px;
+  padding-bottom: 5px;
+}
+#form-logIn h5 {
+  text-align: center;
+}
+#form-logIn form input[type="submit"] {
+  margin: 10px 100px;
+  margin-top: 15px;
+}
+
+/* Mensaje de alerta */
+#msg-alert {
+  width: 300px;
+  text-align: center;
+  margin: 5px auto;
+}

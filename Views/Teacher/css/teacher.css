@@ -1,0 +1,55 @@
+body {
+  background: none;
+  text-align: center;
+}
+
+#tituloPrograma{
+  color: black;
+  margin-top: 20px;
+}
+#barraNavegacionPrincipal {
+  width: 1050px;
+  margin: 20px auto;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border-radius: 15px;
+  background-color: white;
+}
+#barraNavegacionPrincipal .nav-link{
+  margin: auto 10px;
+  font-size: 80%;
+}
+
+section {
+  margin: -40px auto;
+  width: 1050px;
+  background-color: white;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+.overviewTable {
+  margin: 20px;
+}
+.overviewTable th {
+  color: white;
+}
+.option {
+  margin-right: 20px;
+}
+.option a {
+  color: black;
+}
+.generalForm {
+  width: 300px;
+  margin: 0 auto;
+}
+
+/* Mensaje de alerta */
+.msg-alert {
+  width: 300px;
+  text-align: center;
+  margin: 5px auto;
+}

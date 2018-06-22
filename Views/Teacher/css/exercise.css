@@ -1,0 +1,15 @@
+.oculto {
+  display: none;
+}
+.responses {
+  margin-top: 20px;
+}
+.opcionCompletar {
+  border: 1px solid gainsboro;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.addOption {
+  margin-bottom: 20px;
+}
