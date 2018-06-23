@@ -78,3 +78,25 @@ $("#añadirOpcionUnicaActualizar").click(function(){
   $("#divunica").append(opcion);
   u++;
 });
+
+var d = 1;
+$("#añadirOpcionDesplegar").click(function(){
+  var opcion = '<div class="opcion">';
+  opcion += '<div class="form-group"><input class="form-control" type="text" name="desplegar-d-'+d+'" placeholder="descripcion"></div>';
+  opcion += '<div class="form-group form-check"><input type="radio" class="form-check-input" name="desplegar-r" value="'+d+'" id="desplegar-r-'+d+'">';
+  opcion += '<label class="form-check-label" for="desplegar-r-'+d+'">Solucion</label></div>'
+  opcion += '</div>';
+  $("#divdesplegar").append(opcion);
+  d++;
+});
+
+var dResponses = $("#añadirOpcionDesplegarActualizar").data("responses");
+$("#añadirOpcionDesplegarActualizar").click(function(){
+  var opcion = '<div class="opcion">';
+  opcion += '<div class="form-group"><input class="form-control" type="text" name="desplegar-d-'+dResponses+'" placeholder="descripcion"></div>';
+  opcion += '<div class="form-group form-check"><input type="radio" class="form-check-input" name="desplegar-r" value="'+dResponses+'" id="desplegar-r-'+dResponses+'">';
+  opcion += '<label class="form-check-label" for="desplegar-r-'+dResponses+'">Solucion</label></div>'
+  opcion += '</div>';
+  $("#divdesplegar").append(opcion);
+  d++;
+});

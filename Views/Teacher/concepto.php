@@ -33,6 +33,12 @@
   </div>
 
   <div class="col">
+    <?php
+    if (isset($msg_alert)) {
+      echo $msg_alert;
+    }
+    ?>
+
     <form action="<?php echo URL.'Teacher/'.$btnOption.'Concepto/'.$conceptoID; ?>" class="generalForm" enctype="multipart/form-data" method="POST">
       <div class="form-group">
       <label for="name">Titulo del concepto</label>
@@ -64,11 +70,6 @@
       <a href="<?php echo URL; ?>Teacher/concepto/crear" class="btn btn-info">limpiar</a>
     </form>
     
-    <?php
-    if (isset($msg_alert)) {
-      echo $msg_alert;
-    }
-    ?>
   </div>
 </div>
 </section>

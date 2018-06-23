@@ -31,6 +31,12 @@
   </div>
 
   <div class="col">
+    <?php
+    if (isset($msg_alert)) {
+      echo $msg_alert;
+    }
+    ?>
+    
     <form action="<?php echo URL.'Teacher/'.$btnOption.'Student/'.$studentID; ?>" class="generalForm" method="POST">
       <div class="form-group">
       <label for="username">Número identificación del estudiante</label>
@@ -59,11 +65,6 @@
       <a href="<?php echo URL; ?>Teacher/student/crear" class="btn btn-info">limpiar</a>
     </form>
     
-    <?php
-    if (isset($msg_alert)) {
-      echo $msg_alert;
-    }
-    ?>
   </div>
 </div>
 </section>

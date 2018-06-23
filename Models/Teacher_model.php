@@ -84,5 +84,18 @@ class Teacher_model
   public function exerciseDelete($where) {
     return $this->db->delete('exercises', $where);
   }
+
+  public function activityInformation($attributes, $where)
+  {
+    return $this->db->selectWhere($attributes, "activities", $where)[0];
+  }
+
+  public function activitiesInformationOrder($attributes, $order) {
+    return $this->db->selectOrder($attributes, "activities", $order);
+  }
+
+  public function activityRegister($array) {
+    return $this->db->insert('activities', $array);
+  }
 }
 ?>

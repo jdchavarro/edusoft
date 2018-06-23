@@ -35,6 +35,12 @@
   </div>
 
   <div class="col-7">
+    <?php
+    if (isset($msg_alert)) {
+      echo $msg_alert;
+    }
+    ?>
+
     <form action="<?php echo URL.'Teacher/'.$btnOption.'Exercise/'.$exerciseID; ?>" class="generalForm" enctype="multipart/form-data" method="POST">
       
       <!-- Titulo del ejercicio -->
@@ -140,7 +146,7 @@
           <div class="opcion">
             <!-- Opcion minima -->
             <div class="form-group">
-              <input class="form-control" type="text" name="unica-d-0" placeholder="descripcion">
+              <input class="form-control" type="text" name="unica-d-0" placeholder="problema">
             </div>
             <div class="form-group">
               <label>Imagen para la opcion</label>
@@ -153,7 +159,19 @@
           </div>
         </div>
         
-        <div id="divdesplegar" class="responses oculto">desplegar</div>
+        <div id="divdesplegar" class="responses oculto">
+        <button class="btn btn-primary addOption" id="añadirOpcionDesplegar" type="button">Añadir opciones</button>
+          <div class="opcion">
+            <!-- Opcion minima -->
+            <div class="form-group">
+              <input class="form-control" type="text" name="desplegar-d-0" placeholder="problema">
+            </div>
+            <div class="form-group form-check">
+              <input type="radio" class="form-check-input" checked name="desplegar-r" value="0" id="desplegar-r-0">
+              <label class="form-check-label" for="desplegar-r-0">Solucion</label>
+            </div>
+          </div>
+        </div>
       <?php
       } elseif ($exerciseInformation['type'] == "completar") {
         ?>
@@ -258,6 +276,116 @@
 
             </div><!-- Fin div opcion -->
             <?php
+          }//Fin del foreach
+          ?>
+        </div>
+        <?php
+      } elseif ($exerciseInformation['type'] == "unica") {
+        ?>
+        <select class="form-control oculto" name="type">
+        <option value="unica">Seleccion Unica</option>
+        </select>
+
+        <div id="divunica" class="responses">
+          <button type="button" id="añadirOpcionUnicaActualizar" data-responses="<?php echo count($responsesInformation); ?>" class="btn btn-primary addOption">Añadir opciones</button>
+        
+          <?php
+          foreach ($responsesInformation as $key => $response) {
+            ?>
+            <div class="opcion">
+              <div class="form-group">
+                <input class="form-control" type="text" 
+                <?php 
+                if ($btnOption == "borrar") {
+                  echo 'disabled';
+                }
+                ?> 
+                name="unica-d-<?php echo $key; ?>" placeholder="problema" value="<?php echo $response['description']; ?>">
+              </div>
+
+              <div class="form-group">
+                <label>Imagen para la opcion</label>
+                <input type="file" class="form-control-file" name="unica-i-<?php echo $key; ?>">
+              </div>
+
+              <?php
+              if ($response['img'] != "") {
+                ?>
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input" name="unica-c-<?php echo $key; ?>" value="delete" id="unica-c-<?php echo $key; ?>"
+                  <?php if($btnOption == "borrar"){ echo 'disabled checked';} ?> >
+                  <label class="form-check-label" for="unica-c-<?php echo $key; ?>">Eliminar imagen existente.
+                  <?php
+                    echo ' <a href="'.URL.IMG.'response/'.$response['img'].'" target="_blank">'.$response['img'].'</a>';
+                  ?></label>
+                </div>
+                <?php
+              }
+              ?>
+              
+              <div class="form-group form-check">
+                <input type="radio" class="form-check-input" name="unica-r"
+                <?php 
+                if ($btnOption == "borrar") {
+                  echo 'disabled';
+                }
+                if ($response['solution'] == 1) { 
+                  echo 'checked';
+                } 
+                ?>
+                value="<?php echo $key; ?>" id="unica-r-<?php echo $key; ?>">
+                <label class="form-check-label" for="unica-r-<?php echo $key; ?>">Solucion</label>
+              </div>
+
+            </div><!-- Fin div opcion -->
+            <?php
+          }//Fin del foreach
+          ?>
+        </div>
+        <?php
+      } elseif ($exerciseInformation['type'] == "desplegar") {
+        ?>
+        <select class="form-control oculto" name="type">
+        <option value="desplegar">Desplegar</option>
+        </select>
+
+        <div id="divdesplegar" class="responses">
+          <button type="button" id="añadirOpcionDesplegarActualizar" data-responses="<?php echo count($responsesInformation); ?>" class="btn btn-primary addOption">Añadir opciones</button>
+        
+          <?php
+          $indicador = 1;
+          foreach ($responsesInformation as $key => $response) {
+            ?>
+            <div class="opcion">
+              <div class="form-group">
+                <input class="form-control" type="text" 
+                <?php 
+                if ($btnOption == "borrar") {
+                  echo 'disabled';
+                }
+                if ($indicador == 1) {
+                  echo 'required';
+                }
+                ?> 
+                name="desplegar-d-<?php echo $key; ?>" placeholder="problema" value="<?php echo $response['description']; ?>">
+              </div>
+              
+              <div class="form-group form-check">
+                <input type="radio" class="form-check-input" name="desplegar-r"
+                <?php 
+                if ($btnOption == "borrar") {
+                  echo 'disabled';
+                }
+                if ($response['solution'] == 1) { 
+                  echo 'checked';
+                }
+                ?>
+                value="<?php echo $key; ?>" id="desplegar-r-<?php echo $key; ?>">
+                <label class="form-check-label" for="desplegar-r-<?php echo $key; ?>">Solucion</label>
+              </div>
+
+            </div><!-- Fin div opcion -->
+            <?php
             $indicador++;
           }//Fin del foreach
           ?>
@@ -269,12 +397,7 @@
       <input class="btn btn-info" type="submit" name="submit" value="<?php echo $btnOption; ?>">
       <a href="<?php echo URL; ?>Teacher/exercise/crear" class="btn btn-info">limpiar</a>
     </form>
-    
-    <?php
-    if (isset($msg_alert)) {
-      echo $msg_alert;
-    }
-    ?>
+
   </div>
 </div>
 </section>

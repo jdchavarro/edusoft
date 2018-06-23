@@ -24,6 +24,7 @@ class Teacher {
     require_once FOOT;
   }
 
+  /* ESTUDIANTE */
   public function student($btnOption) {
     if ($btnOption != "crear"){
       $btnOption = explode("-", $btnOption);
@@ -111,6 +112,7 @@ class Teacher {
     }
   }
 
+  /* CONCEPTO */
   public function concepto($btnOption){
     if ($btnOption != "crear"){
       $btnOption = explode("-", $btnOption);
@@ -276,6 +278,7 @@ class Teacher {
     }
   }
 
+  /* EJERCICIO */
   public function exercise($btnOption) {
     if ($btnOption != "crear"){
       $btnOption = explode("-", $btnOption);
@@ -448,6 +451,24 @@ class Teacher {
                 $i++;
               }
             }
+          } elseif ($information['type'] == "desplegar") {
+            $i = 0;
+            foreach ($_POST as $key => $value) {
+              $info = explode("-", $key);
+              if ($info[0] == "desplegar" && $info[2] == $i) {
+                $responses["exercise"] = $exerciseID;
+                $responses["description"] = $_POST['desplegar-d-'.$i];
+                if($_POST['desplegar-r'] == $i) {
+                  $responses['solution'] = 1;
+                } else {
+                  $responses['solution'] = 0;
+                }
+                if($responses["description"] != "") {
+                  $this->model->responsesRegister($responses);
+                }
+                $i++;
+              }
+            }
           }
         } else {
           $msg_alert = '<div class="alert alert-danger msg-alert">';
@@ -606,6 +627,92 @@ class Teacher {
               $i++;
             }
           }
+        } elseif ($information["type"] == "unica") {
+          $i = 0;
+          $responsesInfo = $this->model->responsesInformation("*", "exercise='".$id."'");
+          foreach ($_POST as $key => $value) {
+            $info = explode("-", $key);
+            if ($info[0] == "unica" && $info[2] == $i) {
+              $responses["exercise"] = $id;
+              $responses["description"] = $_POST['unica-d-'.$i];
+              if ($_POST['unica-r'] == $i) {
+                $responses["solution"] = 1;
+              } else {
+                $responses["solution"] = 0;
+              }
+              $responseInfo = $responsesInfo[$i];
+              if (isset($_POST['unica-c-'.$i])) {
+                //Eliminamos la imagen del servidor
+                if ($responseInfo['img'] != NULL) {
+                  $img_folder = IMG."response/";
+                  $target_file = $img_folder.$responseInfo['img'];
+                  if (file_exists($target_file)) {
+                    unlink($target_file);
+                  }
+                }
+                $responses["img"] = "";
+              } elseif (isset($_FILES['unica-i-'.$i])) {
+                $img = $_FILES['unica-i-'.$i];
+                $img_folder = IMG."response/";
+                $img_type = strtolower($img['type']);
+      
+                if ($img['error'] == 0) {
+                  //Eliminamos la imagen del servidor
+                  if ($responseInfo['img'] != NULL) {
+                    $img_folder = IMG."response/";
+                    $target_file = $img_folder.$responseInfo['img'];
+                    if (file_exists($target_file)) {
+                      unlink($target_file);
+                    }
+                  }
+                  if($img_type != "image/jpg" && $img_type != "image/png" && $img_type != "image/jpeg" && $img_type != "image/gif") {
+                    $msg_alert = '<div class="alert alert-danger msg-alert">';
+                    $msg_alert .= '<strong>ERROR CR2:</strong> solo se permiten archivos JPG, JPEG, PNG & GIF.</div>';
+                  } else {
+                    $ext = explode("/", $img_type);
+                    $target_file = $img_folder.$id."-".$i.".".$ext[1];
+                    if(move_uploaded_file($img['tmp_name'], $target_file)) {
+                      $responses['img'] = $id."-".$i.".".$ext[1];
+                    } else {
+                      $msg_alert = '<div class="alert alert-danger msg-alert">';
+                      $msg_alert .= '<strong>ERROR CR3:</strong> problemas al intentar cargar la imagen al servidor</div>';
+                    }
+                  }
+                } else {
+                  $responses["img"] = $responseInfo['img'];
+                }
+              } else {
+                $responses["img"] = $responseInfo['img'];
+              }
+              //Eliminar la respuesta antigua
+              $this->model->responsesDelete("id='".$responseInfo['id']."'");
+              if($responses["description"] != "" or $responses["img"] != "") {
+                $this->model->responsesRegister($responses);
+              }
+              $i++;
+            }
+          }
+        } elseif ($information["type"] == "desplegar") {
+          $i = 0;
+          $responsesInfo = $this->model->responsesInformation("*", "exercise='".$id."'");
+          //Eliminar las respuestas antiguas
+          $this->model->responsesDelete("exercise='".$id."'");
+          foreach ($_POST as $key => $value) {
+            $info = explode("-", $key);
+            if ($info[0] == "desplegar" && $info[2] == $i) {
+              $responses["exercise"] = $id;
+              $responses["description"] = $_POST['desplegar-d-'.$i];
+              if ($_POST['desplegar-r'] == $i) {
+                $responses["solution"] = 1;
+              } else {
+                $responses["solution"] = 0;
+              }
+              if($responses["description"] != "") {
+                $this->model->responsesRegister($responses);
+              }
+              $i++;
+            }
+          }
         }
       } else {
         $msg_alert = '<div class="alert alert-danger msg-alert">';
@@ -646,6 +753,63 @@ class Teacher {
       require_once HEAD;
       require_once VIEWS.'Teacher/header.php';
       require_once VIEWS.'Teacher/exercise.php';
+      require_once FOOT;
+    } else {
+      header('Location: '.URL);
+    }
+  }
+
+  /* ACTIVIDAD */
+  public function activity($btnOption) {
+    if ($btnOption != "crear"){
+      $btnOption = explode("-", $btnOption);
+      $activityID = $btnOption[1];
+      $btnOption = $btnOption[0];
+      $activityInformation = $this->model->activityInformation("*", "id='".$activityID."'");
+    }
+    $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
+    require_once HEAD;
+    require_once VIEWS.'Teacher/header.php';
+    require_once VIEWS.'Teacher/activity.php';
+    require_once FOOT;
+  }
+
+  public function crearActivity() {
+    $btnOption = "crear";
+    if (isset($_POST['submit'])) {
+      $activityInformation = $this->model->activityInformation("*", "title='".$_POST['title']."'");
+      if ($exerciseInformation == NULL) {
+        unset($_POST['submit']);
+        
+        /* Guardamos el titulo */
+        $information["title"] = $_POST['title'];
+        unset($_POST['title']);
+
+        /* Guardamos el tipo */
+        $information["type"] = $_POST['type'];
+        unset($_POST['type']);
+
+        /* Guardamos la cantidad de estudiantes */
+        $information["students"] = $_POST['students'];
+
+        $information['status'] = "sin asignar";
+
+        /* Registramos todo en la base de datos */
+        if ($this->model->activityRegister($information)) {
+          $msg_alert .= '<div class="alert alert-success msg-alert">';
+          $msg_alert .= 'Actividad <strong>'.$information["title"].'</strong> creada <strong>EXITOSAMENTE</strong></div>';
+        } else {
+          $msg_alert = '<div class="alert alert-danger msg-alert">';
+          $msg_alert .= '<strong>ERROR CA1:</strong> error al crear la actividad en la base de datos</div>';
+        }
+      } else {
+        $msg_alert = '<div class="alert alert-danger msg-alert">';
+        $msg_alert .= 'La actividad <strong>'.$_POST['title'].'</strong> ya esta registrada</div>';
+      }
+      $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
+      require_once HEAD;
+      require_once VIEWS.'Teacher/header.php';
+      require_once VIEWS.'Teacher/activity.php';
       require_once FOOT;
     } else {
       header('Location: '.URL);
