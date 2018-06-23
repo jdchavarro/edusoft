@@ -4,7 +4,7 @@
 .responses {
   margin-top: 20px;
 }
-.opcionCompletar {
+.opcion {
   border: 1px solid gainsboro;
   padding: 10px;
   border-radius: 10px;
@@ -12,4 +12,10 @@
 }
 .addOption {
   margin-bottom: 20px;
+}
+.overviewTable tbody {
+  font-size: 80%;
+}
+.generalForm {
+  width: 450px;
 }

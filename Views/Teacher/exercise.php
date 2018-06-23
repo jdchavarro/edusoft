@@ -4,7 +4,7 @@
 <h3>SECCION EJERCICIOS</h3>
 
 <div class="row">
-  <div class="col">
+  <div class="col-5">
     <table class="table overviewTable">
       <thead class="bg-info">
         <tr>
@@ -34,8 +34,10 @@
     </table>
   </div>
 
-  <div class="col">
+  <div class="col-7">
     <form action="<?php echo URL.'Teacher/'.$btnOption.'Exercise/'.$exerciseID; ?>" class="generalForm" enctype="multipart/form-data" method="POST">
+      
+      <!-- Titulo del ejercicio -->
       <div class="form-group">
       <label for="name">Titulo del ejercicio</label>
       <input class="form-control" type="text" required name="title" placeholder="Ingrese titulo" 
@@ -49,6 +51,7 @@
       ?>>
       </div>
 
+      <!-- Descripcion del ejercicio -->
       <div class="form-group">
       <label for="description">Descripción del ejercicio</label>
       <textarea class="form-control" name="description" placeholder="Ingrese descripcion"
@@ -63,11 +66,13 @@
       ?></textarea>
       </div>
 
+      <!-- Imagen del ejercicio -->
       <div class="form-group">
       <label for="img">Imagen para el ejercicio</label>
       <input type="file" class="form-control-file" <?php if($btnOption == "borrar"){ echo 'disabled';} ?> name="img">
       </div>
 
+      <!-- Si se esta actualizando o borrando mostramos el checkbox -->
       <?php
       if (isset($exerciseInformation)){
       ?>
@@ -83,6 +88,7 @@
       <hr>
 
       <?php
+      /* Si no hay informacion de un ejercicio a mostrar */
       if (!isset($exerciseInformation)) {
       ?>
         <select class="form-control" name="type" id="tiposEjercicio">
@@ -92,22 +98,41 @@
         <option value="desplegar">Desplegar</option>
         </select>
 
+        <!-- Inicio div completar -->
         <div id="divcompletar" class="responses">
-        <button type="button" id="añadirOpcionCompletar" class="btn btn-primary addOption">Añadir opciones</button>
+          <button type="button" id="añadirOpcionCompletar" class="btn btn-primary addOption">Añadir opciones</button>
         
-        <div class="opcionCompletar">
-        <!-- Opcion minima -->
-        <div class="form-group">
-        <input class="form-control" type="text" required name="completar-p-0" placeholder="problema">
+          <div class="opcion">
+            <!-- Opcion minima -->
+            <div class="form-group">
+              <input class="form-control" type="text" name="completar-p-0" placeholder="problema">
+            </div>
+            <div class="form-group">
+              <input class="form-control" type="text" name="completar-s-0" placeholder="solución">
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-        <input class="form-control" type="text" required name="completar-s-0" placeholder="solución">
-        </div>
-        </div>
-
-        </div>
+        <!-- Fin div completar -->
         
-        <div id="divmultiple" class="responses oculto">multiple</div>
+        <!-- Inicio div multiple -->
+        <div id="divmultiple" class="responses oculto">
+          <button type="button" id="añadirOpcionMultiple" class="btn btn-primary addOption">Añadir opciones</button>
+          <div class="opcion">
+            <!-- Opcion minima -->
+            <div class="form-group">
+              <input class="form-control" type="text" name="multiple-d-0" placeholder="descripcion">
+            </div>
+            <div class="form-group">
+              <label>Imagen para la opcion</label>
+              <input type="file" class="form-control-file" name="multiple-i-0">
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" name="multiple-s-0" value="multiple-s-0" id="multiple-s-0">
+              <label class="form-check-label" for="multiple-s-0">Es solucion</label>
+            </div>
+          </div>
+        </div>
+        <!-- Fin div multiple -->
         
         <div id="divunica" class="responses oculto">unica</div>
         
@@ -126,7 +151,7 @@
         $indicador = 1;
         foreach ($responsesInformation as $key => $response) {
           ?>
-          <div class="opcionCompletar">
+          <div class="opcion">
           <div class="form-group">
           <input class="form-control" type="text" 
           <?php 
@@ -154,6 +179,71 @@
           $indicador++;
         }
         ?>
+        </div>
+        <?php
+      } elseif ($exerciseInformation['type'] == "multiple") {
+        ?>
+        <select class="form-control oculto" name="type">
+        <option value="multiple">Seleccion Multiple</option>
+        </select>
+
+        <div id="divmultiple" class="responses">
+          <button type="button" id="añadirOpcionMultipleActualizar" data-responses="<?php echo count($responsesInformation); ?>" class="btn btn-primary addOption">Añadir opciones</button>
+        
+          <?php
+          foreach ($responsesInformation as $key => $response) {
+            ?>
+            <div class="opcion">
+              <div class="form-group">
+                <input class="form-control" type="text" 
+                <?php 
+                if ($btnOption == "borrar") {
+                  echo 'disabled';
+                }
+                ?> 
+                name="multiple-d-<?php echo $key; ?>" placeholder="problema" value="<?php echo $response['description']; ?>">
+              </div>
+
+              <div class="form-group">
+                <label>Imagen para la opcion</label>
+                <input type="file" class="form-control-file" name="multiple-i-<?php echo $key; ?>">
+              </div>
+
+              <?php
+              if ($response['img'] != "") {
+                ?>
+                <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" name="multiple-c-<?php echo $key; ?>" value="delete" id="multiple-c-<?php echo $key; ?>"
+                <?php if($btnOption == "borrar"){ echo 'disabled checked';} ?>>
+                <label class="form-check-label" for="multiple-c-<?php echo $key; ?>">Eliminar imagen existente.
+                <?php
+                  echo ' <a href="'.URL.IMG.'response/'.$response['img'].'" target="_blank">'.$response['img'].'</a>';
+                ?></label>
+                </div>
+                <?php
+              }
+              ?>
+              
+
+              <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" name="multiple-s-<?php echo $key; ?>"
+                <?php 
+                if ($btnOption == "borrar") {
+                  echo 'disabled';
+                }
+                if ($response['solution'] == 1) { 
+                  echo 'checked';
+                } 
+                ?>
+                value="multiple-s-<?php echo $key; ?>" id="multiple-s-<?php echo $key; ?>">
+                <label class="form-check-label" for="multiple-s-<?php echo $key; ?>">Es solucion</label>
+              </div>
+
+            </div><!-- Fin div opcion -->
+            <?php
+            $indicador++;
+          }//Fin del foreach
+          ?>
         </div>
         <?php
       }

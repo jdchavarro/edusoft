@@ -13,20 +13,44 @@ $("#tiposEjercicio").change(function(){
   });
 });
 
-var n = 1;
+var c = 1;
 $("#añadirOpcionCompletar").click(function(){
   var opcion = '<div class="opcionCompletar"><div class="form-group">';
-  opcion += '<input class="form-control" type="text" required name="completar-p-'+n+'" placeholder="problema">';
-  opcion += '</div><div class="form-group"><input class="form-control" type="text" required name="completar-s-'+n+'" placeholder="solución"></div></div>';
+  opcion += '<input class="form-control" type="text" name="completar-p-'+c+'" placeholder="problema">';
+  opcion += '</div><div class="form-group"><input class="form-control" type="text" name="completar-s-'+c+'" placeholder="solución"></div></div>';
   $("#divcompletar").append(opcion);
-  n++;
+  c++;
 });
 
-nResponses = $("#añadirOpcionCompletarActualizar").data("responses");
+var cResponses = $("#añadirOpcionCompletarActualizar").data("responses");
 $("#añadirOpcionCompletarActualizar").click(function(){
   var opcion = '<div class="opcionCompletar"><div class="form-group">';
-  opcion += '<input class="form-control" type="text" required name="completar-p-'+nResponses+'" placeholder="problema">';
-  opcion += '</div><div class="form-group"><input class="form-control" type="text" required name="completar-s-'+nResponses+'" placeholder="solución"></div></div>';
+  opcion += '<input class="form-control" type="text" required name="completar-p-'+cResponses+'" placeholder="problema">';
+  opcion += '</div><div class="form-group"><input class="form-control" type="text" required name="completar-s-'+cResponses+'" placeholder="solución"></div></div>';
   $("#divcompletar").append(opcion);
-  nResponses++;
+  cResponses++;
+});
+
+var m = 1;
+$("#añadirOpcionMultiple").click(function(){
+  var opcion = '<div class="opcion">';
+  opcion += '<div class="form-group"><input class="form-control" type="text" name="multiple-d-'+m+'" placeholder="descripcion"></div>';
+  opcion += '<div class="form-group"><label>Imagen para la opcion</label><input type="file" class="form-control-file" name="multiple-i-'+m+'"></div>';
+  opcion += '<div class="form-group form-check"><input type="checkbox" class="form-check-input" name="multiple-s-'+m+'" value="multiple-s-'+m+'" id="multiple-s-'+m+'">';
+  opcion += '<label class="form-check-label" for="multiple-s-'+m+'">Es solucion</label></div>'
+  opcion += '</div>';
+  $("#divmultiple").append(opcion);
+  m++;
+});
+
+var mResponses = $("#añadirOpcionMultipleActualizar").data("responses");
+$("#añadirOpcionMultipleActualizar").click(function(){
+  var opcion = '<div class="opcion">';
+  opcion += '<div class="form-group"><input class="form-control" type="text" name="multiple-d-'+mResponses+'" placeholder="descripcion"></div>';
+  opcion += '<div class="form-group"><label>Imagen para la opcion</label><input type="file" class="form-control-file" name="multiple-i-'+mResponses+'"></div>';
+  opcion += '<div class="form-group form-check"><input type="checkbox" class="form-check-input" name="multiple-s-'+mResponses+'" value="multiple-s-'+mResponses+'" id="multiple-s-'+mResponses+'">';
+  opcion += '<label class="form-check-label" for="multiple-s-'+mResponses+'">Es solucion</label></div>'
+  opcion += '</div>';
+  $("#divmultiple").append(opcion);
+  m++;
 });

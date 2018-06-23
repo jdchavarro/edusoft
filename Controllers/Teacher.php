@@ -297,12 +297,18 @@ class Teacher {
       $exerciseInformation = $this->model->exerciseInformation("*", "title='".$_POST['title']."'");
       if ($exerciseInformation == NULL) {
         unset($_POST['submit']);
+        
+        /* Guardamos el titulo */
         $information["title"] = $_POST['title'];
         unset($_POST['title']);
+
+        /* Guardamos el descripcion */
         if (isset($_POST['description'])) {
           $information["description"] = $_POST['description'];
         }
         unset($_POST['description']);
+        
+        /* Guardamos la imagen */
         if (isset($_FILES['img'])) {
           $img = $_FILES['img'];
           $img_folder = IMG."exercise/";
@@ -325,21 +331,73 @@ class Teacher {
           }
           unset($_FILES['img']);
         }
+
+        /* Guardamos el tipo */
         $information["type"] = $_POST['type'];
         unset($_POST['type']);
+
+        /* Registramos todo en la base de datos */
         if ($this->model->exerciseRegister($information)) {
           $msg_alert .= '<div class="alert alert-success msg-alert">';
           $msg_alert .= 'Ejercicio <strong>'.$information["title"].'</strong> creado <strong>EXITOSAMENTE</strong></div>';
 
           $exercise = $this->model->exerciseInformation("*", "title='".$information['title']."'");
           $exerciseID = $exercise['id'];
+
+          /* Verificamos el tipo de ejercicio */
           if($information["type"] == "completar") {
-            $largo = (count($_POST) / 2);
-            for ($i=0; $i < $largo; $i++) { 
-              $responses["exercise"] = $exerciseID;
-              $responses["description"] = $_POST['completar-p-'.$i];
-              $responses["solution"] = $_POST['completar-s-'.$i];
-              $this->model->responsesRegister($responses);
+            $i = 0;
+            foreach ($_POST as $key => $value) {
+              $info = explode("-", $key);
+              if ($info[0] == "completar" && $info[2] == $i) {
+                $responses["exercise"] = $exerciseID;
+                $responses["description"] = $_POST['completar-p-'.$i];
+                $responses["solution"] = $_POST['completar-s-'.$i];
+                if($responses["description"] != "" && $responses["solution"] != "") {
+                  $this->model->responsesRegister($responses);
+                }
+                $i++;
+              }
+            }
+          } elseif ($information['type'] == "multiple") {
+            $i = 0;
+            foreach ($_POST as $key => $value) {
+              $info = explode("-", $key);
+              if ($info[0] == "multiple" && $info[2] == $i) {
+                $responses["exercise"] = $exerciseID;
+                $responses["description"] = $_POST['multiple-d-'.$i];
+                if (isset($_POST['multiple-s-'.$i])) {
+                  $responses["solution"] = 1;
+                } else {
+                  $responses["solution"] = 0;
+                }
+                if (isset($_FILES['multiple-i-'.$i])) {
+                  $img = $_FILES['multiple-i-'.$i];
+                  $img_folder = IMG."response/";
+                  $img_type = strtolower($img['type']);
+        
+                  if ($img['error'] == 0) {
+                    if($img_type != "image/jpg" && $img_type != "image/png" && $img_type != "image/jpeg" && $img_type != "image/gif") {
+                      $msg_alert = '<div class="alert alert-danger msg-alert">';
+                      $msg_alert .= '<strong>ERROR CR2:</strong> solo se permiten archivos JPG, JPEG, PNG & GIF.</div>';
+                    } else {
+                      $ext = explode("/", $img_type);
+                      $target_file = $img_folder.$exerciseID."-".$i.".".$ext[1];
+                      if(move_uploaded_file($img['tmp_name'], $target_file)) {
+                        $responses['img'] = $exerciseID."-".$i.".".$ext[1];
+                      } else {
+                        $msg_alert = '<div class="alert alert-danger msg-alert">';
+                        $msg_alert .= '<strong>ERROR CR3:</strong> problemas al intentar cargar la imagen al servidor</div>';
+                      }
+                    }
+                  }
+                  unset($_FILES['multiple-s-'.$i]);
+                }
+                if($responses["description"] != "" or $responses["img"] != "") {
+                  $this->model->responsesRegister($responses);
+                }
+                $i++;
+              }
             }
           }
         } else {
@@ -361,7 +419,6 @@ class Teacher {
   }
 
   public function actualizarExercise($id) {
-    
     if (isset($_POST['submit'])) {
       unset($_POST['submit']);
       $information["title"] = $_POST['title'];
@@ -422,13 +479,27 @@ class Teacher {
         if($information["type"] == "completar") {
           //Eliminar las respuestas antiguas
           $this->model->responsesDelete("exercise='".$id."'");
-          $largo = (count($_POST) / 2);
-          for ($i=0; $i < $largo; $i++) { 
-            $responses["exercise"] = $id;
-            $responses["description"] = $_POST['completar-p-'.$i];
-            $responses["solution"] = $_POST['completar-s-'.$i];
-            if($responses["description"] != "" && $responses["solution"] != "") {
-              $this->model->responsesRegister($responses);
+          $i = 0;
+          foreach ($_POST as $key => $value) {
+            $info = explode("-", $key);
+            if ($info[0] == "completar" && $info[2] == $i) {
+              $responses["exercise"] = $id;
+              $responses["description"] = $_POST['completar-p-'.$i];
+              $responses["solution"] = $_POST['completar-s-'.$i];
+              if($responses["description"] != "" && $responses["solution"] != "") {
+                $this->model->responsesRegister($responses);
+              }
+              $i++;
+            }
+          }
+        } elseif ($information["type"] == "multiple") {
+          //Eliminar las respuestas antiguas
+          $this->model->responsesDelete("exercise='".$id."'");
+          $i = 0;
+          foreach ($_POST as $key => $value) {
+            $info = explode("-", $key);
+            if ($info[0] == "multiple" && $info[2] == $i) {
+              
             }
           }
         }
