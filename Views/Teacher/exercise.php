@@ -213,12 +213,12 @@
               if ($response['img'] != "") {
                 ?>
                 <div class="form-group form-check">
-                <input type="checkbox" class="form-check-input" name="multiple-c-<?php echo $key; ?>" value="delete" id="multiple-c-<?php echo $key; ?>"
-                <?php if($btnOption == "borrar"){ echo 'disabled checked';} ?>>
-                <label class="form-check-label" for="multiple-c-<?php echo $key; ?>">Eliminar imagen existente.
-                <?php
-                  echo ' <a href="'.URL.IMG.'response/'.$response['img'].'" target="_blank">'.$response['img'].'</a>';
-                ?></label>
+                  <input type="checkbox" class="form-check-input" name="multiple-c-<?php echo $key; ?>" value="delete" id="multiple-c-<?php echo $key; ?>"
+                  <?php if($btnOption == "borrar"){ echo 'disabled checked';} ?> >
+                  <label class="form-check-label" for="multiple-c-<?php echo $key; ?>">Eliminar imagen existente.
+                  <?php
+                    echo ' <a href="'.URL.IMG.'response/'.$response['img'].'" target="_blank">'.$response['img'].'</a>';
+                  ?></label>
                 </div>
                 <?php
               }

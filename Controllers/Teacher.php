@@ -390,8 +390,12 @@ class Teacher {
                         $msg_alert .= '<strong>ERROR CR3:</strong> problemas al intentar cargar la imagen al servidor</div>';
                       }
                     }
+                  } else {
+                    $responses["img"] = NULL;
                   }
-                  unset($_FILES['multiple-s-'.$i]);
+                  unset($_FILES['multiple-i-'.$i]);
+                } else {
+                  $responses["img"] = NULL;
                 }
                 if($responses["description"] != "" or $responses["img"] != "") {
                   $this->model->responsesRegister($responses);
@@ -493,13 +497,68 @@ class Teacher {
             }
           }
         } elseif ($information["type"] == "multiple") {
-          //Eliminar las respuestas antiguas
-          $this->model->responsesDelete("exercise='".$id."'");
           $i = 0;
+          $responsesInfo = $this->model->responsesInformation("*", "exercise='".$id."'");
           foreach ($_POST as $key => $value) {
             $info = explode("-", $key);
             if ($info[0] == "multiple" && $info[2] == $i) {
-              
+              $responses["exercise"] = $id;
+              $responses["description"] = $_POST['multiple-d-'.$i];
+              if (isset($_POST['multiple-s-'.$i])) {
+                $responses["solution"] = 1;
+              } else {
+                $responses["solution"] = 0;
+              }
+              $responseInfo = $responsesInfo[$i];
+              if (isset($_POST['multiple-c-'.$i])) {
+                //Eliminamos la imagen del servidor
+                if ($responseInfo['img'] != NULL) {
+                  $img_folder = IMG."response/";
+                  $target_file = $img_folder.$responseInfo['img'];
+                  if (file_exists($target_file)) {
+                    unlink($target_file);
+                  }
+                }
+                $responses["img"] = "";
+              } elseif (isset($_FILES['multiple-i-'.$i])) {
+                $img = $_FILES['multiple-i-'.$i];
+                $img_folder = IMG."response/";
+                $img_type = strtolower($img['type']);
+      
+                if ($img['error'] == 0) {
+                  //Eliminamos la imagen del servidor
+                  if ($responseInfo['img'] != NULL) {
+                    $img_folder = IMG."response/";
+                    $target_file = $img_folder.$responseInfo['img'];
+                    if (file_exists($target_file)) {
+                      unlink($target_file);
+                    }
+                  }
+                  if($img_type != "image/jpg" && $img_type != "image/png" && $img_type != "image/jpeg" && $img_type != "image/gif") {
+                    $msg_alert = '<div class="alert alert-danger msg-alert">';
+                    $msg_alert .= '<strong>ERROR CR2:</strong> solo se permiten archivos JPG, JPEG, PNG & GIF.</div>';
+                  } else {
+                    $ext = explode("/", $img_type);
+                    $target_file = $img_folder.$id."-".$i.".".$ext[1];
+                    if(move_uploaded_file($img['tmp_name'], $target_file)) {
+                      $responses['img'] = $id."-".$i.".".$ext[1];
+                    } else {
+                      $msg_alert = '<div class="alert alert-danger msg-alert">';
+                      $msg_alert .= '<strong>ERROR CR3:</strong> problemas al intentar cargar la imagen al servidor</div>';
+                    }
+                  }
+                } else {
+                  $responses["img"] = $responseInfo['img'];
+                }
+              } else {
+                $responses["img"] = $responseInfo['img'];
+              }
+              //Eliminar la respuesta antigua
+              $this->model->responsesDelete("id='".$responseInfo['id']."'");
+              if($responses["description"] != "" or $responses["img"] != "") {
+                $this->model->responsesRegister($responses);
+              }
+              $i++;
             }
           }
         }
