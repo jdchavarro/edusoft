@@ -134,7 +134,24 @@
         </div>
         <!-- Fin div multiple -->
         
-        <div id="divunica" class="responses oculto">unica</div>
+        <!-- Inicio div unica -->
+        <div id="divunica" class="responses oculto">
+          <button class="btn btn-primary addOption" id="añadirOpcionUnica" type="button">Añadir opciones</button>
+          <div class="opcion">
+            <!-- Opcion minima -->
+            <div class="form-group">
+              <input class="form-control" type="text" name="unica-d-0" placeholder="descripcion">
+            </div>
+            <div class="form-group">
+              <label>Imagen para la opcion</label>
+              <input type="file" class="form-control-file" name="unica-i-0">
+            </div>
+            <div class="form-group form-check">
+              <input type="radio" class="form-check-input" checked name="unica-r" value="0" id="unica-r-0">
+              <label class="form-check-label" for="unica-r-0">Solucion</label>
+            </div>
+          </div>
+        </div>
         
         <div id="divdesplegar" class="responses oculto">desplegar</div>
       <?php

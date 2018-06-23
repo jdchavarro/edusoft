@@ -403,6 +403,51 @@ class Teacher {
                 $i++;
               }
             }
+          } elseif ($information['type'] == "unica") {
+            $i = 0;
+            foreach ($_POST as $key => $value) {
+              $info = explode("-", $key);
+              if ($info[0] == "unica" && $info[2] == $i) {
+                $responses["exercise"] = $exerciseID;
+                $responses["description"] = $_POST['unica-d-'.$i];
+                if($_POST['unica-r'] == $i) {
+                  $responses['solution'] = 1;
+                } else {
+                  $responses['solution'] = 0;
+                }
+
+                if (isset($_FILES['unica-i-'.$i])) {
+                  $img = $_FILES['unica-i-'.$i];
+                  $img_folder = IMG."response/";
+                  $img_type = strtolower($img['type']);
+        
+                  if ($img['error'] == 0) {
+                    if($img_type != "image/jpg" && $img_type != "image/png" && $img_type != "image/jpeg" && $img_type != "image/gif") {
+                      $msg_alert = '<div class="alert alert-danger msg-alert">';
+                      $msg_alert .= '<strong>ERROR CR2:</strong> solo se permiten archivos JPG, JPEG, PNG & GIF.</div>';
+                    } else {
+                      $ext = explode("/", $img_type);
+                      $target_file = $img_folder.$exerciseID."-".$i.".".$ext[1];
+                      if(move_uploaded_file($img['tmp_name'], $target_file)) {
+                        $responses['img'] = $exerciseID."-".$i.".".$ext[1];
+                      } else {
+                        $msg_alert = '<div class="alert alert-danger msg-alert">';
+                        $msg_alert .= '<strong>ERROR CR3:</strong> problemas al intentar cargar la imagen al servidor</div>';
+                      }
+                    }
+                  } else {
+                    $responses["img"] = NULL;
+                  }
+                  unset($_FILES['unica-i-'.$i]);
+                } else {
+                  $responses["img"] = NULL;
+                }
+                if($responses["description"] != "" or $responses["img"] != "") {
+                  $this->model->responsesRegister($responses);
+                }
+                $i++;
+              }
+            }
           }
         } else {
           $msg_alert = '<div class="alert alert-danger msg-alert">';

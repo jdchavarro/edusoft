@@ -52,5 +52,29 @@ $("#añadirOpcionMultipleActualizar").click(function(){
   opcion += '<label class="form-check-label" for="multiple-s-'+mResponses+'">Es solucion</label></div>'
   opcion += '</div>';
   $("#divmultiple").append(opcion);
-  m++;
+  mResponses++;
+});
+
+var u = 1;
+$("#añadirOpcionUnica").click(function(){
+  var opcion = '<div class="opcion">';
+  opcion += '<div class="form-group"><input class="form-control" type="text" name="unica-d-'+u+'" placeholder="descripcion"></div>';
+  opcion += '<div class="form-group"><label>Imagen para la opcion</label><input type="file" class="form-control-file" name="unica-i-'+u+'"></div>';
+  opcion += '<div class="form-group form-check"><input type="radio" class="form-check-input" name="unica-r" value="'+u+'" id="unica-r-'+u+'">';
+  opcion += '<label class="form-check-label" for="unica-r-'+u+'">Solucion</label></div>'
+  opcion += '</div>';
+  $("#divunica").append(opcion);
+  u++;
+});
+
+var uResponses = $("#añadirOpcionUnicaActualizar").data("responses");
+$("#añadirOpcionUnicaActualizar").click(function(){
+  var opcion = '<div class="opcion">';
+  opcion += '<div class="form-group"><input class="form-control" type="text" name="unica-d-'+uResponses+'" placeholder="descripcion"></div>';
+  opcion += '<div class="form-group"><label>Imagen para la opcion</label><input type="file" class="form-control-file" name="unica-i-'+uResponses+'"></div>';
+  opcion += '<div class="form-group form-check"><input type="radio" class="form-check-input" name="unica-r" value="'+uResponses+'" id="unica-r-'+uResponses+'">';
+  opcion += '<label class="form-check-label" for="unica-r-'+uResponses+'">Solucion</label></div>'
+  opcion += '</div>';
+  $("#divunica").append(opcion);
+  u++;
 });
