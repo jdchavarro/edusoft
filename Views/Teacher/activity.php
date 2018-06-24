@@ -131,20 +131,43 @@
       if ($btnOption == "asignar") {
         ?>
         <!-- Actividades after -->
-      <div class="form-group">
-        <label for="after">Lista de actividades para predecesora</label>
-        <select class="form-control" name="after" id="after">
-          <?php
-          echo '<option value=""></option>';
-          foreach ($activitiesInformation as $act) {
-            if ($act["id"] != $activityInformation['id']) {
-              echo '<option value="'.$act["id"].'">'.$act["title"].'</option>';
+        <div class="form-group">
+          <label for="after">Lista de actividades para predecesora</label>
+          <select class="form-control" name="after" id="after">
+            <?php
+            echo '<option value=""></option>';
+            foreach ($activitiesInformation as $act) {
+              if ($act["id"] != $activityInformation['id'] && $act['status'] != "sin asignar") {
+                echo '<option value="'.$act["id"].'">'.$act["title"].'</option>';
+              }
             }
-          }
+            ?>
+          </select>
+        </div>
+        <?php
+
+        if ($activityInformation['type'] == "examen") {
           ?>
-        </select>
-      </div>
-      <?php
+          <!-- Examenes a asignar -->
+          <div class="form-group">
+            <label for="asignar">Asignar a</label>
+            <select class="form-control" name="asignar" id="asignar">
+              <?php
+              echo '<option value="aleatorio">Todos y aleatorio</option>';
+              foreach ($studentsInformation as $est) {
+                echo '<option value="'.$est["id"].'">'.$est["lastName"].' '.$est["name"].'</option>';
+              }
+              ?>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="grupo">Grupo</label>
+            <input class="form-control" type="number" min="1" required id="grupo" name="grupo">
+            </div>
+          <?php
+        }
+
       }
       ?>
       

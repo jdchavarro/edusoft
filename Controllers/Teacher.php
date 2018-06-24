@@ -770,6 +770,7 @@ class Teacher {
     }
     $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
     $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+    $studentsInformation = $this->model->studentsInformationOrder("*", "rol='student'", "lastName");
     require_once HEAD;
     require_once VIEWS.'Teacher/header.php';
     require_once VIEWS.'Teacher/activity.php';
@@ -817,6 +818,7 @@ class Teacher {
       }
       $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
       $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+      $studentsInformation = $this->model->studentsInformationOrder("*", "rol='student'", "lastName");
       require_once HEAD;
       require_once VIEWS.'Teacher/header.php';
       require_once VIEWS.'Teacher/activity.php';
@@ -854,6 +856,7 @@ class Teacher {
       }
       $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
       $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+      $studentsInformation = $this->model->studentsInformationOrder("*", "rol='student'", "lastName");
       require_once HEAD;
       require_once VIEWS.'Teacher/header.php';
       require_once VIEWS.'Teacher/activity.php';
@@ -879,6 +882,7 @@ class Teacher {
       }
       $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
       $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+      $studentsInformation = $this->model->studentsInformationOrder("*", "rol='student'", "lastName");
       require_once HEAD;
       require_once VIEWS.'Teacher/header.php';
       require_once VIEWS.'Teacher/activity.php';
@@ -890,11 +894,44 @@ class Teacher {
 
   public function asignarActivity($id) {
     $btnOption = "crear";
+    $students = $this->model->studentsInformationOrder("*", "rol='student'", "lastName");
+    $actExe = $this->model->activityExercisesInformation("*", "activity='".$id."'");
     if (isset($_POST['submit'])) {
       if($_POST['after'] != "") {
         $information["after"] = $_POST['after'];
       }
-      $information['status'] = "asignada";
+      if (isset($_POST['asignar'])) {
+        $information['grupo'] = $_POST['grupo'];
+        if ($_POST['asignar'] != "aleatorio") {
+          foreach ($actExe as $exe) {
+            $responses = $this->model->responsesInformation("*", "exercise='".$exe['exercise']."'");
+            foreach ($responses as $response) {
+              $atributo['activity'] = $id;
+              $atributo['exercise'] = $exe['exercise'];
+              $atributo['response'] = $response['id'];
+              $atributo['student'] = $_POST['aisgnar'];
+              $this->model->asignarEstudiante($atributo);
+            }
+          }
+          $information['status'] = "asignado";
+        } else {
+          $information['status'] = "espera";
+        }
+      } else {
+        $information['status'] = "asignada";
+        foreach ($students as $estudent) {
+          foreach ($actExe as $exe) {
+            $responses = $this->model->responsesInformation("*", "exercise='".$exe['exercise']."'");
+            foreach ($responses as $response) {
+              $atributo['activity'] = $id;
+              $atributo['exercise'] = $exe['exercise'];
+              $atributo['response'] = $response['id'];
+              $atributo['student'] = $estudent['username'];
+              $this->model->asignarEstudiante($atributo);
+            }
+          }
+        }
+      }
       if ($this->model->activityUpdate($information, "id='".$id."'")) {
         $msg_alert .= '<div class="alert alert-success msg-alert">';
         $msg_alert .= 'Actividad asignada <strong>EXITOSAMENTE</strong></div>';

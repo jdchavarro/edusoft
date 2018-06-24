@@ -117,5 +117,9 @@ class Teacher_model
   public function activityDelete($where) {
     return $this->db->delete('activities', $where);
   }
+
+  public function asignarEstudiante($attr) {
+    return $this->db->insert('student_answers', $attr);
+  }
 }
 ?>
