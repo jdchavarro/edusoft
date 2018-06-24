@@ -97,5 +97,25 @@ class Teacher_model
   public function activityRegister($array) {
     return $this->db->insert('activities', $array);
   }
+
+  public function activityExercisesRegister($array) {
+    return $this->db->insert('activity_has_exercises', $array);
+  }
+
+  public function activityExercisesInformation($attributes, $where) {
+    return $this->db->selectWhere($attributes, "activity_has_exercises", $where);
+  }
+
+  public function activityUpdate($array, $where) {
+    return $this->db->update('activities', $array, $where);
+  }
+
+  public function activityExercisesDelete($where){
+    return $this->db->delete('activity_has_exercises', $where);
+  }
+
+  public function activityDelete($where) {
+    return $this->db->delete('activities', $where);
+  }
 }
 ?>

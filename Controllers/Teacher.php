@@ -766,8 +766,10 @@ class Teacher {
       $activityID = $btnOption[1];
       $btnOption = $btnOption[0];
       $activityInformation = $this->model->activityInformation("*", "id='".$activityID."'");
+      $activityExercisesInformation = $this->model->activityExercisesInformation("*", "activity='".$activityID."'");
     }
     $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
+    $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
     require_once HEAD;
     require_once VIEWS.'Teacher/header.php';
     require_once VIEWS.'Teacher/activity.php';
@@ -798,6 +800,13 @@ class Teacher {
         if ($this->model->activityRegister($information)) {
           $msg_alert .= '<div class="alert alert-success msg-alert">';
           $msg_alert .= 'Actividad <strong>'.$information["title"].'</strong> creada <strong>EXITOSAMENTE</strong></div>';
+          $activity = $this->model->activityInformation("*", "title='".$information["title"]."'");
+          $exercises = $_POST['exercises'];
+          foreach ($exercises as $value) {
+            $a['activity'] = $activity['id'];
+            $a['exercise'] = $value;
+            $this->model->activityExercisesRegister($a);
+          }
         } else {
           $msg_alert = '<div class="alert alert-danger msg-alert">';
           $msg_alert .= '<strong>ERROR CA1:</strong> error al crear la actividad en la base de datos</div>';
@@ -807,6 +816,95 @@ class Teacher {
         $msg_alert .= 'La actividad <strong>'.$_POST['title'].'</strong> ya esta registrada</div>';
       }
       $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
+      $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+      require_once HEAD;
+      require_once VIEWS.'Teacher/header.php';
+      require_once VIEWS.'Teacher/activity.php';
+      require_once FOOT;
+    } else {
+      header('Location: '.URL);
+    }
+  }
+
+  public function actualizarActivity($id) {
+    $btnOption = "crear";
+    if (isset($_POST['submit'])) {
+      /* Guardamos el titulo */
+      $information["title"] = $_POST['title'];
+      
+      /* Guardamos la cantidad de estudiantes */
+      $information["students"] = $_POST['students'];
+
+      /* Registramos todo en la base de datos */
+      if ($this->model->activityUpdate($information, "id='".$id."'")) {
+        $msg_alert .= '<div class="alert alert-success msg-alert">';
+        $msg_alert .= 'Actividad actualizada <strong>EXITOSAMENTE</strong></div>';
+        
+        //eliminar los ejercicios asignados anteriormente
+        $this->model->activityExercisesDelete("activity='".$id."'");
+        $exercises = $_POST['exercises'];
+        foreach ($exercises as $value) {
+          $a['activity'] = $id;
+          $a['exercise'] = $value;
+          $this->model->activityExercisesRegister($a);
+        }
+      } else {
+        $msg_alert = '<div class="alert alert-danger msg-alert">';
+        $msg_alert .= '<strong>ERROR UA1:</strong> error al actualizar la actividad en la base de datos</div>';
+      }
+      $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
+      $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+      require_once HEAD;
+      require_once VIEWS.'Teacher/header.php';
+      require_once VIEWS.'Teacher/activity.php';
+      require_once FOOT;
+    } else {
+      header('Location: '.URL);
+    }
+  }
+
+  public function borrarActivity($id) {
+    $btnOption = "crear";
+    if (isset($_POST['submit'])) {
+      
+      if ($this->model->activityDelete("id='".$id."'")) {
+        $msg_alert .= '<div class="alert alert-success msg-alert">';
+        $msg_alert .= 'Actividad eliminada <strong>EXITOSAMENTE</strong></div>';
+        
+        //eliminar los ejercicios asignados anteriormente
+        $this->model->activityExercisesDelete("activity='".$id."'");
+      } else {
+        $msg_alert = '<div class="alert alert-danger msg-alert">';
+        $msg_alert .= '<strong>ERROR DA1:</strong> error al actualizar la actividad en la base de datos</div>';
+      }
+      $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
+      $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
+      require_once HEAD;
+      require_once VIEWS.'Teacher/header.php';
+      require_once VIEWS.'Teacher/activity.php';
+      require_once FOOT;
+    } else {
+      header('Location: '.URL);
+    }
+  }
+
+  public function asignarActivity($id) {
+    $btnOption = "crear";
+    if (isset($_POST['submit'])) {
+      if($_POST['after'] != "") {
+        $information["after"] = $_POST['after'];
+      }
+      $information['status'] = "asignada";
+      if ($this->model->activityUpdate($information, "id='".$id."'")) {
+        $msg_alert .= '<div class="alert alert-success msg-alert">';
+        $msg_alert .= 'Actividad asignada <strong>EXITOSAMENTE</strong></div>';
+        
+      } else {
+        $msg_alert = '<div class="alert alert-danger msg-alert">';
+        $msg_alert .= '<strong>ERROR AA1:</strong> error al asignar la actividad en la base de datos</div>';
+      }
+      $activitiesInformation = $this->model->activitiesInformationOrder("*", "title");
+      $exercisesInformation = $this->model->exercisesInformationOrder("*", "title");
       require_once HEAD;
       require_once VIEWS.'Teacher/header.php';
       require_once VIEWS.'Teacher/activity.php';

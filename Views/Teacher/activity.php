@@ -100,6 +100,53 @@
       } 
       ?>>
       </div>
+
+      <!-- Ejercicios -->
+      <div class="form-group">
+        <label for="exercises">Lista de ejercicios disponibles</label>
+        <select multiple class="form-control" required name="exercises[]"
+        <?php 
+        if ($btnOption == "borrar" or $btnOption == "asignar") { 
+          echo 'disabled';
+        }
+        ?> 
+        id="exercises">
+          <?php
+          foreach ($exercisesInformation as $key => $exercise) {
+            echo '<option value="'.$exercise["id"].'"';
+            if (isset($activityInformation)) {
+              foreach ($activityExercisesInformation as $ae) {
+                if ($ae['exercise'] == $exercise["id"]) {
+                  echo 'selected';
+                }
+              }
+            }
+            echo '>'.$exercise["title"].'</option>';
+          }
+          ?>
+        </select>
+      </div>
+
+      <?php
+      if ($btnOption == "asignar") {
+        ?>
+        <!-- Actividades after -->
+      <div class="form-group">
+        <label for="after">Lista de actividades para predecesora</label>
+        <select class="form-control" name="after" id="after">
+          <?php
+          echo '<option value=""></option>';
+          foreach ($activitiesInformation as $act) {
+            if ($act["id"] != $activityInformation['id']) {
+              echo '<option value="'.$act["id"].'">'.$act["title"].'</option>';
+            }
+          }
+          ?>
+        </select>
+      </div>
+      <?php
+      }
+      ?>
       
       <input class="btn btn-info" type="submit" name="submit" value="<?php echo $btnOption; ?>">
       <a href="<?php echo URL; ?>Teacher/activity/crear" class="btn btn-info">limpiar</a>
