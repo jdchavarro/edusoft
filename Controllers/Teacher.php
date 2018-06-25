@@ -903,33 +903,19 @@ class Teacher {
       if (isset($_POST['asignar'])) {
         $information['grupo'] = $_POST['grupo'];
         if ($_POST['asignar'] != "aleatorio") {
-          foreach ($actExe as $exe) {
-            $responses = $this->model->responsesInformation("*", "exercise='".$exe['exercise']."'");
-            foreach ($responses as $response) {
-              $atributo['activity'] = $id;
-              $atributo['exercise'] = $exe['exercise'];
-              $atributo['response'] = $response['id'];
-              $atributo['student'] = $_POST['aisgnar'];
-              $this->model->asignarEstudiante($atributo);
-            }
-          }
-          $information['status'] = "asignado";
+          $atributo['activity'] = $id;
+          $atributo['student'] = $_POST['asignar'];
+          $this->model->asignarEstudiante($atributo);
+          $information['status'] = "asignada";
         } else {
           $information['status'] = "espera";
         }
       } else {
         $information['status'] = "asignada";
-        foreach ($students as $estudent) {
-          foreach ($actExe as $exe) {
-            $responses = $this->model->responsesInformation("*", "exercise='".$exe['exercise']."'");
-            foreach ($responses as $response) {
-              $atributo['activity'] = $id;
-              $atributo['exercise'] = $exe['exercise'];
-              $atributo['response'] = $response['id'];
-              $atributo['student'] = $estudent['username'];
-              $this->model->asignarEstudiante($atributo);
-            }
-          }
+        foreach ($students as $student) {
+          $atributo['activity'] = $id;
+          $atributo['student'] = $student['username'];
+          $this->model->asignarEstudiante($atributo);
         }
       }
       if ($this->model->activityUpdate($information, "id='".$id."'")) {

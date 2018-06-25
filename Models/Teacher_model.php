@@ -119,7 +119,7 @@ class Teacher_model
   }
 
   public function asignarEstudiante($attr) {
-    return $this->db->insert('student_answers', $attr);
+    return $this->db->insert('student_activities', $attr);
   }
 }
 ?>

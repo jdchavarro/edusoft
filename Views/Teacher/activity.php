@@ -155,7 +155,7 @@
               <?php
               echo '<option value="aleatorio">Todos y aleatorio</option>';
               foreach ($studentsInformation as $est) {
-                echo '<option value="'.$est["id"].'">'.$est["lastName"].' '.$est["name"].'</option>';
+                echo '<option value="'.$est["username"].'">'.$est["lastName"].' '.$est["name"].'</option>';
               }
               ?>
             </select>
