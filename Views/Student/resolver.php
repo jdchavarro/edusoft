@@ -105,7 +105,7 @@ foreach ($ejerciciosActividad as $ejercicioActividad) {
         foreach ($todasRespuestas as $respuesta) {
           if ($ejercicio['id'] == $respuesta['exercise']) {
             echo '<div class="form-check">';
-            echo '<input class="form-check-input" type="radio" id="ejercicio-'.$ejercicio['id'].'-'.$respuesta['id'].'" name="unica-'.$ejercicio['id'].'">';
+            echo '<input class="form-check-input" type="radio" id="ejercicio-'.$ejercicio['id'].'-'.$respuesta['id'].'" name="unica-'.$ejercicio['id'].'" value="'.$respuesta['id'].'">';
             echo '<label class="form-check-label" for="ejercicio-'.$ejercicio['id'].'-'.$respuesta['id'].'">';
             if ($respuesta['description'] != "") {
               echo $respuesta['description'];

@@ -1,0 +1,16 @@
+.imgConcepto img {
+  width: 700px;
+}
+.completar {
+  width: 50px;
+}
+.select {
+  width: 250px;
+  margin: 0 auto;
+}
+/* Mensaje de alerta */
+.msg-alert {
+  width: 300px;
+  text-align: center;
+  margin: 5px auto;
+}

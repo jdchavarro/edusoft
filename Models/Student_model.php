@@ -43,5 +43,13 @@ class Student_model
   public function responseRegister($array) {
     return $this->db->insert('student_responses', $array);
   }
+
+  public function getStudentResponses($attr, $where){
+    return $this->db->selectWhere($attr, 'student_responses', $where);
+  }
+
+  public function studentActivitiesUpdate($array, $where) {
+    return $this->db->update('student_activities', $array, $where);
+  }
 }
 ?>

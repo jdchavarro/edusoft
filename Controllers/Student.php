@@ -73,7 +73,7 @@ class Student {
                     } else {
                       $dato['rating'] = 0;
                     }
-                    //$this->model->responseRegister($dato);
+                    $this->model->responseRegister($dato);
                   }
                 }
               } elseif ($tipo[0] == "desplegar") {
@@ -88,17 +88,17 @@ class Student {
                 } else {
                   $dato['rating'] = 0;
                 }
-                //$this->model->responseRegister($dato);
+                $this->model->responseRegister($dato);
               } elseif ($tipo[0] == "multiple") {
                 $dato['student'] = $estudianteID;
                 $dato['activity'] = $activityID;
                 $dato['exercise'] = $tipo[1];
                 foreach ($todasRespuestas as $respuesta) {
                   if ($respuesta['exercise'] == $tipo[1]) {
-                    $exite = false;
+                    $existe = false;
                     foreach ($value as $k => $v) {
                       if ($respuesta['id'] == $k) {
-                        $exite = true;
+                        $existe = true;
                         $dato['response'] = $k;
                         $dato['answer'] = 1;
                         if ($respuesta['solution'] == 1) {
@@ -108,7 +108,7 @@ class Student {
                         }
                       }
                     }
-                    if ($exite) {
+                    if ($existe) {
                       $this->model->responseRegister($dato);
                     } else {
                       $dato['response'] = $respuesta['id'];
@@ -122,8 +122,91 @@ class Student {
                     }
                   }
                 }
+              } elseif ($tipo[0] == "unica") {
+                $dato['student'] = $estudianteID;
+                $dato['activity'] = $activityID;
+                $dato['exercise'] = $tipo[1];
+                foreach ($todasRespuestas as $respuesta) {
+                  if ($respuesta['exercise'] == $tipo[1]) {
+                    
+                    if ($respuesta['id'] == $value) {
+                      $existe = true;
+                      $dato['response'] = $value;
+                      $dato['answer'] = 1;
+                      if ($respuesta['solution'] == 1) {
+                        $dato['rating'] = 1;  
+                      } else {
+                        $dato['rating'] = 0;
+                      }
+                      $this->model->responseRegister($dato);
+                    } else {
+                      $dato['response'] = $respuesta['id'];
+                      $dato['answer'] = 0;
+                      if ($respuesta['solution'] == 1) {
+                        $dato['rating'] = 0;
+                        $this->model->responseRegister($dato);
+                      }
+                    }
+                  }
+                }
               }
             }
+            //Verificamos que se halla respondido todo
+            $todosEjercicios = $this->model->getExercises("*");
+            $ejerciciosActividad = $this->model->getExercisesActivity("*", "activity='".$activityID."'");
+            foreach ($ejerciciosActividad as $ejercicioActividad) {
+              $test = $this->model->getStudentResponses("*", "exercise='".$ejercicioActividad['exercise']."' AND student='".$estudianteID."' AND activity='".$activityID."'");
+              if ($test == NULL) {
+                foreach ($todosEjercicios as $ejercicio) {
+                  if ($ejercicioActividad['exercise'] == $ejercicio['id']) {
+                    if ($ejercicio['type'] == "unica") {
+                      $dato['student'] = $estudianteID;
+                      $dato['activity'] = $activityID;
+                      $dato['exercise'] = $ejercicio['id'];
+                      foreach ($todasRespuestas as $respuesta) {
+                        if ($respuesta['exercise'] == $ejercicio['id']) {
+                          $dato['response'] = $respuesta['id'];
+                          if ($respuesta['solution'] == 0) {
+                            $dato['answer'] = 1;
+                          }
+                        }
+                      }
+                      $dato['rating'] = 0;
+                      $this->model->responseRegister($dato);
+                    } elseif ($ejercicio['type'] == "multiple") {
+                      $dato['student'] = $estudianteID;
+                      $dato['activity'] = $activityID;
+                      $dato['exercise'] = $ejercicio['id'];
+                      foreach ($todasRespuestas as $respuesta) {
+                        if ($respuesta['exercise'] == $ejercicio['id']) {
+                          $dato['response'] = $respuesta['id'];
+                          if ($respuesta['solution'] == 0) {
+                            $dato['answer'] = 1;
+                          } else {
+                            $dato['answer'] = 0;
+                          }
+                          $dato['rating'] = 0;
+                          $this->model->responseRegister($dato);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            //Calificamos
+            $answers = $this->model->getStudentResponses("*", "student='".$estudianteID."' AND activity='".$activityID."'");
+            $cantidadEjercicios = count($answers);
+            $nBuenas = 0;
+            foreach ($answers as $answer) {
+              if ($answer['rating'] == 1) {
+                $nBuenas++;
+              }
+            }
+            $actualizacion['status'] = "calificado";
+            $actualizacion['rating'] = round((5 * ($nBuenas / $cantidadEjercicios)), 1);
+            $this->model->studentActivitiesUpdate($actualizacion, "student='".$estudianteID."' AND activity='".$activityID."'");
+
           } else {
             $msg_alert .= '<div class="alert alert-danger msg-alert">';
             $msg_alert .= '<strong>'.$estudianteID.'</strong> ya resolvio la actividad</div>';
@@ -134,15 +217,9 @@ class Student {
         }
       }
 
-
-
-
       $actividad = $this->model->getActivities("*", "id='".$activityID."'")[0];
-      $ejerciciosActividad = $this->model->getExercisesActivity("*", "activity='".$activityID."'");
-      $todosEjercicios = $this->model->getExercises("*");
-      $todasRespuestas = $this->model->getResponses("*");
-      $conceptos = $this->model->getConceptos("*");
-      $actividadesEstudiantes = $this->model->getStudentActivities("*");
+      $answers = $this->model->getStudentResponses("*", "student='".Session::getSession("username")."' AND activity='".$activityID."'");
+      $calificacion = $this->model->getActivitiesStudent("*", "student='".Session::getSession("username")."' AND activity='".$activityID."'")[0]['rating'];
       require_once HEAD;
       require_once VIEWS.'Student/header.php';
       require_once VIEWS.'Student/revisar.php';
