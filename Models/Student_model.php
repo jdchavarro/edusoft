@@ -59,5 +59,13 @@ class Student_model
   public function getComputers($attr, $where){
     return $this->db->selectWhere($attr, 'computers', $where);
   }
+
+  public function setComputers($array) {
+    return $this->db->insert('computers', $array);
+  }
+
+  public function asignarEstudiante($attr) {
+    return $this->db->insert('student_activities', $attr);
+  }
 }
 ?>
