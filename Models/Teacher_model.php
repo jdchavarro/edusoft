@@ -121,5 +121,15 @@ class Teacher_model
   public function asignarEstudiante($attr) {
     return $this->db->insert('student_activities', $attr);
   }
+
+  public function activitiesInformationWhereOrder($attributes, $where, $order)
+  {
+    return $this->db->selectWhereOrder($attributes, "activities", $where, $order);
+  }
+
+  public function informeActividad($attributes, $where)
+  {
+    return $this->db->selectWhere($attributes, "student_activities", $where);
+  }
 }
 ?>

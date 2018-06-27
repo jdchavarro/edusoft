@@ -1,0 +1,11 @@
+.selects {
+  width: 200px;
+  margin: 0 auto;
+}
+.oculto {
+  display: none;
+}
+.tablaResultado {
+  width: 500px;
+  margin: 0 auto;
+}

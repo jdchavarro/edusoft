@@ -936,5 +936,41 @@ class Teacher {
       header('Location: '.URL);
     }
   }
+
+  /* INFORME */
+  public function informe() {
+    $lista_estudiantes = $this->model->studentsInformationOrder("*", "rol='student'", "lastName");
+    $lista_actividades_resueltas = $this->model->activitiesInformationWhereOrder("*", "status='resuelto'", "title");
+    require_once HEAD;
+    require_once VIEWS.'Teacher/header.php';
+    require_once VIEWS.'Teacher/informe.php';
+    require_once FOOT;
+  }
+
+  public function informeActividad($id) {
+    $actividades = $this->model->informeActividad("*", "activity='".$id."'");
+    foreach ($actividades as $actividad) {
+      echo '<tr>';
+      $estudiante = $this->model->studentInformation("*", "id='".$actividad['student']."'");
+      echo '<td>'.$estudiante['lastName'].' '.$estudiante['name'].'</td>';
+      echo '<td>'.$actividad['rating'].'</td>';
+      echo '</tr>';
+    }
+  }
+
+  public function informeEstudiante($id) {
+    $actividades = $this->model->informeActividad("*", "student='".$id."'");
+    foreach ($actividades as $actividad) {
+      echo '<tr>';
+      $act = $this->model->activityInformation("*", "id='".$actividad['activity']."'");
+      echo '<td>'.$act['title'].'</td>';
+      if ($actividad['rating'] == NULL) {
+        echo '<td>AUN SIN RESOLVER</td>';
+      } else {
+        echo '<td>'.$actividad['rating'].'</td>';
+      }
+      echo '</tr>';
+    }
+  }
 }
 ?>
