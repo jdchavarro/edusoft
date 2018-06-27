@@ -51,5 +51,13 @@ class Student_model
   public function studentActivitiesUpdate($array, $where) {
     return $this->db->update('student_activities', $array, $where);
   }
+
+  public function activityUpdate($array, $where) {
+    return $this->db->update('activities', $array, $where);
+  }
+
+  public function getComputers($attr, $where){
+    return $this->db->selectWhere($attr, 'computers', $where);
+  }
 }
 ?>

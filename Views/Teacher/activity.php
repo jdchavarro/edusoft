@@ -137,7 +137,7 @@
             <?php
             echo '<option value=""></option>';
             foreach ($activitiesInformation as $act) {
-              if ($act["id"] != $activityInformation['id'] && $act['status'] != "sin asignar") {
+              if ($act["id"] != $activityInformation['id'] && $act['status'] != "sin asignar" && $act['type'] != "examen") {
                 echo '<option value="'.$act["id"].'">'.$act["title"].'</option>';
               }
             }

@@ -19,7 +19,8 @@ class Student {
 
   public function index(){
     $actividades = $this->model->getActivities("*", "status!='sin asignar'");
-    $actividadesEstudiante = $this->model->getActivitiesStudent("*", "student='".Session::getSession("username")."'");
+    $examenes = $this->model->getActivities("*", "type='examen'");
+    $actividades_del_estudiante = $this->model->getActivitiesStudent("*", "student='".Session::getSession("username")."'");
     require_once HEAD;
     require_once VIEWS.'Student/header.php';
     require_once VIEWS.'Student/index.php';
@@ -217,6 +218,9 @@ class Student {
         }
       }
 
+      $update['status'] = "resuelto";
+      $this->model->activityUpdate($update, "id='".$activityID."'");
+
       $actividad = $this->model->getActivities("*", "id='".$activityID."'")[0];
       $answers = $this->model->getStudentResponses("*", "student='".Session::getSession("username")."' AND activity='".$activityID."'");
       $calificacion = $this->model->getActivitiesStudent("*", "student='".Session::getSession("username")."' AND activity='".$activityID."'")[0]['rating'];
@@ -227,6 +231,17 @@ class Student {
     } else {
       header("Location: ".URL);
     }
+  }
+
+  public function asignar($grupo) {
+    $actividades = $this->model->getActivities("*", "status='espera' AND grupo='".$grupo."'");
+    foreach ($actividades as $actividad) {
+      $respuesta_computadores = $this->model->getComputers("*", "activity='".$actividad['id']."'");
+      if ($respuesta_computadores != NULL) {
+        $computers[$actividad['id']] = $respuesta_computadores['name'];
+      }
+    }
+    
   }
 
 }
