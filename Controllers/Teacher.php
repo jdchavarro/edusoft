@@ -953,7 +953,11 @@ class Teacher {
       echo '<tr>';
       $estudiante = $this->model->studentInformation("*", "username='".$actividad['student']."'");
       echo '<td>'.$estudiante['lastName'].' '.$estudiante['name'].'</td>';
-      echo '<td>'.$actividad['rating'].'</td>';
+      if ($actividad['rating'] == NULL) {
+        echo '<td>AUN SIN RESOLVER</td>';
+      } else {
+        echo '<td>'.$actividad['rating'].'</td>';
+      }
       echo '</tr>';
     }
   }
