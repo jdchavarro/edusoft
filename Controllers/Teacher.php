@@ -951,7 +951,7 @@ class Teacher {
     $actividades = $this->model->informeActividad("*", "activity='".$id."'");
     foreach ($actividades as $actividad) {
       echo '<tr>';
-      $estudiante = $this->model->studentInformation("*", "id='".$actividad['student']."'");
+      $estudiante = $this->model->studentInformation("*", "username='".$actividad['student']."'");
       echo '<td>'.$estudiante['lastName'].' '.$estudiante['name'].'</td>';
       echo '<td>'.$actividad['rating'].'</td>';
       echo '</tr>';
