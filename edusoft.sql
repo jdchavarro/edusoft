@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 24, 2018 at 02:12 AM
+-- Generation Time: Jun 27, 2018 at 11:19 PM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.2.5
 
@@ -34,17 +34,20 @@ CREATE TABLE `activities` (
   `type` varchar(10) COLLATE utf8_spanish_ci NOT NULL,
   `students` int(2) NOT NULL,
   `status` varchar(15) COLLATE utf8_spanish_ci NOT NULL,
-  `after` int(20) DEFAULT NULL
+  `after` int(20) DEFAULT NULL,
+  `grupo` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Dumping data for table `activities`
 --
 
-INSERT INTO `activities` (`id`, `title`, `type`, `students`, `status`, `after`) VALUES
-(15, 'Actividad Completa', 'actividad', 2, 'asignada', NULL),
-(16, 'Actividad Completa 2', 'actividad', 3, 'asignada', 15),
-(17, 'Examen', 'examen', 1, 'asignada', NULL);
+INSERT INTO `activities` (`id`, `title`, `type`, `students`, `status`, `after`, `grupo`) VALUES
+(42, 'actividad unica', 'actividad', 3, 'resuelto', NULL, NULL),
+(43, 'evaluacion general 1', 'examen', 1, 'resuelto', 42, 1),
+(44, 'evaluacion general 2', 'examen', 1, 'resuelto', NULL, 1),
+(45, 'evaluacion especial julian', 'examen', 1, 'resuelto', 42, 1),
+(46, 'evaluacion especial jose', 'examen', 1, 'resuelto', 42, 1);
 
 -- --------------------------------------------------------
 
@@ -63,14 +66,53 @@ CREATE TABLE `activity_has_exercises` (
 --
 
 INSERT INTO `activity_has_exercises` (`id`, `activity`, `exercise`) VALUES
-(9, 15, 26),
-(10, 15, 29),
-(11, 15, 28),
-(12, 16, 27),
-(13, 17, 26),
-(14, 17, 29),
-(15, 17, 27),
-(16, 17, 28);
+(74, 36, 30),
+(75, 36, 33),
+(76, 37, 31),
+(77, 37, 32),
+(78, 38, 30),
+(79, 38, 33),
+(80, 38, 31),
+(81, 38, 32),
+(82, 39, 30),
+(83, 39, 33),
+(84, 39, 31),
+(85, 39, 32),
+(86, 40, 30),
+(87, 41, 33),
+(88, 42, 30),
+(89, 43, 30),
+(90, 43, 33),
+(91, 43, 31),
+(92, 43, 32),
+(93, 44, 30),
+(94, 44, 33),
+(95, 44, 31),
+(96, 44, 32),
+(97, 45, 30),
+(98, 46, 33);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `computers`
+--
+
+CREATE TABLE `computers` (
+  `id` int(20) NOT NULL,
+  `name` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `activity` int(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Dumping data for table `computers`
+--
+
+INSERT INTO `computers` (`id`, `name`, `activity`) VALUES
+(14, 'jdchavarro-pc', 45),
+(15, 'jdchavarro-pc', 43),
+(16, 'jdchavarro-pc', 44),
+(17, 'jdchavarro-pc', 46);
 
 -- --------------------------------------------------------
 
@@ -90,85 +132,8 @@ CREATE TABLE `conceptos` (
 --
 
 INSERT INTO `conceptos` (`id`, `name`, `description`, `img`) VALUES
-(8, 'test', 'test', NULL);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `ejercicio`
---
-
-CREATE TABLE `ejercicio` (
-  `idEjercicio` int(11) NOT NULL,
-  `tituloEjercicio` varchar(50) NOT NULL,
-  `descripcionEjercicio` varchar(300) DEFAULT NULL,
-  `imagenEjercicio` varchar(45) DEFAULT NULL,
-  `solucionEjercicio` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `estudiante`
---
-
-CREATE TABLE `estudiante` (
-  `idEstudiante` int(11) NOT NULL,
-  `nombreEstudiante` varchar(45) DEFAULT NULL,
-  `apellidoEstudiante` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `estudiante_has_examen`
---
-
-CREATE TABLE `estudiante_has_examen` (
-  `Estudiante_idEstudiante` int(11) NOT NULL,
-  `Examen_idExamen` int(11) NOT NULL,
-  `calificacionExamen` varchar(45) DEFAULT NULL,
-  `resuelto` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `estudiante_has_examen_has_ejercicio`
---
-
-CREATE TABLE `estudiante_has_examen_has_ejercicio` (
-  `Estudiante_idEstudiante` int(11) NOT NULL,
-  `Examen_has_Ejercicio_Examen_idExamen` int(11) NOT NULL,
-  `Examen_has_Ejercicio_Ejercicio_idEjercicio` int(11) NOT NULL,
-  `solucionEstudiante` varchar(45) DEFAULT NULL,
-  `buena` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `examen`
---
-
-CREATE TABLE `examen` (
-  `idExamen` int(11) NOT NULL,
-  `temaExamen` varchar(45) DEFAULT NULL,
-  `tipoExamen` varchar(45) NOT NULL,
-  `cantidadEstudiantesExamen` int(11) DEFAULT NULL COMMENT 'Individual\nGrupal',
-  `estado` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `examen_has_ejercicio`
---
-
-CREATE TABLE `examen_has_ejercicio` (
-  `Examen_idExamen` int(11) NOT NULL,
-  `Ejercicio_idEjercicio` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+(1, 'Concepto1', 'Descripcion', 'Concepto1.png'),
+(2, 'Concepto 2', 'Descripcion', 'Concepto 2.png');
 
 -- --------------------------------------------------------
 
@@ -189,10 +154,10 @@ CREATE TABLE `exercises` (
 --
 
 INSERT INTO `exercises` (`id`, `title`, `description`, `img`, `type`) VALUES
-(26, 'completar suma', 'Complete la siguiente suma', NULL, 'completar'),
-(27, 'multiple resta', 'Seleccione las restas correctas', NULL, 'multiple'),
-(28, 'unica multiplicacion', 'de las siguientes multiplicaciones, seleccione la verdadera', NULL, 'unica'),
-(29, 'desplegar division', 'la operacion 2 / 2 = 1 es', NULL, 'desplegar');
+(30, 'Completar Suma', 'completar', 'Completar Suma.png', 'completar'),
+(31, 'Multiple resta', 'multiple', NULL, 'multiple'),
+(32, 'unica multiplicacion', 'unica', NULL, 'unica'),
+(33, 'desplegar division', 'varias', NULL, 'desplegar');
 
 -- --------------------------------------------------------
 
@@ -213,15 +178,98 @@ CREATE TABLE `responses` (
 --
 
 INSERT INTO `responses` (`id`, `exercise`, `description`, `img`, `solution`) VALUES
-(168, 26, '2 + _ = 5', NULL, '3'),
-(169, 27, '2 - 3 = 1', '', '0'),
-(170, 27, '2 - 3 = -1', '', '1'),
-(171, 27, '3 - 2 = 1', '', '1'),
-(172, 28, '2 x 3 = 5', '', '0'),
-(173, 28, '2 x 3 = 6', '', '1'),
-(174, 28, '2 x 3 = 7', '', '0'),
-(175, 29, 'verdadera', NULL, '1'),
-(176, 29, 'falsa', NULL, '0');
+(186, 30, '2 + _ = 5', NULL, '3'),
+(187, 30, '_ - 4 = 6', NULL, '10'),
+(188, 31, 'solo descripcion', '', '1'),
+(189, 31, 'solo imagen', '31-1.jpeg', '0'),
+(190, 31, 'imagen descripcion', '31-2.png', '1'),
+(191, 31, 'des', '', '0'),
+(192, 32, 'abc', '', '0'),
+(193, 32, '', '32-1.png', '0'),
+(194, 32, 'ac', '32-2.jpeg', '1'),
+(195, 33, 'a', NULL, '0'),
+(196, 33, 'b', NULL, '1'),
+(197, 33, 'c', NULL, '0');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_activities`
+--
+
+CREATE TABLE `student_activities` (
+  `id` int(20) NOT NULL,
+  `activity` int(20) NOT NULL,
+  `student` int(20) NOT NULL,
+  `status` varchar(20) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `rating` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Dumping data for table `student_activities`
+--
+
+INSERT INTO `student_activities` (`id`, `activity`, `student`, `status`, `rating`) VALUES
+(152, 42, 2, 'calificado', 5),
+(153, 42, 1, 'calificado', 5),
+(154, 42, 3, 'calificado', 5),
+(155, 42, 4, 'calificado', 5),
+(156, 42, 5, 'calificado', 5),
+(157, 46, 5, 'calificado', 5),
+(158, 45, 1, 'calificado', 5),
+(159, 43, 2, 'calificado', 2),
+(160, 44, 3, 'calificado', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `student_responses`
+--
+
+CREATE TABLE `student_responses` (
+  `id` int(50) NOT NULL,
+  `student` int(20) NOT NULL,
+  `activity` int(20) NOT NULL,
+  `exercise` int(20) NOT NULL,
+  `response` int(20) NOT NULL,
+  `answer` varchar(50) COLLATE utf8_spanish_ci NOT NULL,
+  `rating` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+
+--
+-- Dumping data for table `student_responses`
+--
+
+INSERT INTO `student_responses` (`id`, `student`, `activity`, `exercise`, `response`, `answer`, `rating`) VALUES
+(329, 1, 42, 30, 186, '3', 1),
+(330, 1, 42, 30, 187, '10', 1),
+(331, 2, 42, 30, 186, '3', 1),
+(332, 2, 42, 30, 187, '10', 1),
+(333, 5, 42, 30, 186, '3', 1),
+(334, 5, 42, 30, 187, '10', 1),
+(335, 4, 42, 30, 186, '3', 1),
+(336, 4, 42, 30, 187, '10', 1),
+(337, 3, 42, 30, 186, '3', 1),
+(338, 3, 42, 30, 187, '10', 1),
+(339, 1, 45, 30, 186, '3', 1),
+(340, 1, 45, 30, 187, '10', 1),
+(341, 2, 43, 30, 186, '3', 1),
+(342, 2, 43, 30, 187, '10', 1),
+(343, 2, 43, 33, 195, '0', 0),
+(344, 2, 43, 32, 194, '1', 1),
+(345, 2, 43, 31, 188, '0', 0),
+(346, 2, 43, 31, 189, '1', 0),
+(347, 2, 43, 31, 190, '0', 0),
+(348, 2, 43, 31, 191, '1', 0),
+(349, 3, 44, 30, 186, '', 0),
+(350, 3, 44, 30, 187, '', 0),
+(351, 3, 44, 33, 195, '0', 0),
+(352, 3, 44, 31, 188, '0', 0),
+(353, 3, 44, 31, 189, '1', 0),
+(354, 3, 44, 31, 190, '0', 0),
+(355, 3, 44, 31, 191, '1', 0),
+(356, 3, 44, 32, 194, '1', 0),
+(357, 5, 46, 33, 196, '1', 1);
 
 -- --------------------------------------------------------
 
@@ -247,26 +295,8 @@ INSERT INTO `users` (`id`, `username`, `password`, `rol`, `name`, `lastName`) VA
 (2, '1', '1', 'student', 'Julian David', 'Chavarro Balanta'),
 (3, '2', '2', 'student', 'Sara', 'Bermudez Rincon'),
 (4, '3', '3', 'student', 'Ana Victoria', 'Chavarro Bermudez'),
-(5, '4', '4', 'student', 'Isaac', 'Chavarro Bermudez');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `usuario`
---
-
-CREATE TABLE `usuario` (
-  `idUsuario` int(11) NOT NULL,
-  `username` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `password` varchar(45) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `usuario`
---
-
-INSERT INTO `usuario` (`idUsuario`, `username`, `password`) VALUES
-(1, 'admin', 'admin');
+(5, '4', '4', 'student', 'Isaac', 'Chavarro Bermudez'),
+(6, '5', '5', 'student', 'Jose Daniel', 'Zapata Balanta');
 
 --
 -- Indexes for dumped tables
@@ -285,52 +315,16 @@ ALTER TABLE `activity_has_exercises`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `computers`
+--
+ALTER TABLE `computers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `conceptos`
 --
 ALTER TABLE `conceptos`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `ejercicio`
---
-ALTER TABLE `ejercicio`
-  ADD PRIMARY KEY (`idEjercicio`);
-
---
--- Indexes for table `estudiante`
---
-ALTER TABLE `estudiante`
-  ADD PRIMARY KEY (`idEstudiante`);
-
---
--- Indexes for table `estudiante_has_examen`
---
-ALTER TABLE `estudiante_has_examen`
-  ADD PRIMARY KEY (`Estudiante_idEstudiante`,`Examen_idExamen`),
-  ADD KEY `fk_Estudiante_has_Examen_Examen1_idx` (`Examen_idExamen`),
-  ADD KEY `fk_Estudiante_has_Examen_Estudiante_idx` (`Estudiante_idEstudiante`);
-
---
--- Indexes for table `estudiante_has_examen_has_ejercicio`
---
-ALTER TABLE `estudiante_has_examen_has_ejercicio`
-  ADD PRIMARY KEY (`Estudiante_idEstudiante`,`Examen_has_Ejercicio_Examen_idExamen`,`Examen_has_Ejercicio_Ejercicio_idEjercicio`),
-  ADD KEY `fk_Estudiante_has_Examen_has_Ejercicio_Examen_has_Ejercicio_idx` (`Examen_has_Ejercicio_Examen_idExamen`,`Examen_has_Ejercicio_Ejercicio_idEjercicio`),
-  ADD KEY `fk_Estudiante_has_Examen_has_Ejercicio_Estudiante1_idx` (`Estudiante_idEstudiante`);
-
---
--- Indexes for table `examen`
---
-ALTER TABLE `examen`
-  ADD PRIMARY KEY (`idExamen`);
-
---
--- Indexes for table `examen_has_ejercicio`
---
-ALTER TABLE `examen_has_ejercicio`
-  ADD PRIMARY KEY (`Examen_idExamen`,`Ejercicio_idEjercicio`),
-  ADD KEY `fk_Examen_has_Ejercicio_Ejercicio1_idx` (`Ejercicio_idEjercicio`),
-  ADD KEY `fk_Examen_has_Ejercicio_Examen1_idx` (`Examen_idExamen`);
 
 --
 -- Indexes for table `exercises`
@@ -345,16 +339,22 @@ ALTER TABLE `responses`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `student_activities`
+--
+ALTER TABLE `student_activities`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `student_responses`
+--
+ALTER TABLE `student_responses`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `usuario`
---
-ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`idUsuario`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -364,68 +364,55 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT for table `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `activity_has_exercises`
 --
 ALTER TABLE `activity_has_exercises`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
+
+--
+-- AUTO_INCREMENT for table `computers`
+--
+ALTER TABLE `computers`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `conceptos`
 --
 ALTER TABLE `conceptos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `exercises`
 --
 ALTER TABLE `exercises`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `responses`
 --
 ALTER TABLE `responses`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=198;
+
+--
+-- AUTO_INCREMENT for table `student_activities`
+--
+ALTER TABLE `student_activities`
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=161;
+
+--
+-- AUTO_INCREMENT for table `student_responses`
+--
+ALTER TABLE `student_responses`
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=358;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT for table `usuario`
---
-ALTER TABLE `usuario`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `estudiante_has_examen`
---
-ALTER TABLE `estudiante_has_examen`
-  ADD CONSTRAINT `fk_Estudiante_has_Examen_Estudiante` FOREIGN KEY (`Estudiante_idEstudiante`) REFERENCES `estudiante` (`idEstudiante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Estudiante_has_Examen_Examen1` FOREIGN KEY (`Examen_idExamen`) REFERENCES `examen` (`idExamen`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `estudiante_has_examen_has_ejercicio`
---
-ALTER TABLE `estudiante_has_examen_has_ejercicio`
-  ADD CONSTRAINT `fk_Estudiante_has_Examen_has_Ejercicio_Estudiante1` FOREIGN KEY (`Estudiante_idEstudiante`) REFERENCES `estudiante` (`idEstudiante`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Estudiante_has_Examen_has_Ejercicio_Examen_has_Ejercicio1` FOREIGN KEY (`Examen_has_Ejercicio_Examen_idExamen`,`Examen_has_Ejercicio_Ejercicio_idEjercicio`) REFERENCES `examen_has_ejercicio` (`Examen_idExamen`, `Ejercicio_idEjercicio`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Constraints for table `examen_has_ejercicio`
---
-ALTER TABLE `examen_has_ejercicio`
-  ADD CONSTRAINT `fk_Examen_has_Ejercicio_Ejercicio1` FOREIGN KEY (`Ejercicio_idEjercicio`) REFERENCES `ejercicio` (`idEjercicio`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_Examen_has_Ejercicio_Examen1` FOREIGN KEY (`Examen_idExamen`) REFERENCES `examen` (`idExamen`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
