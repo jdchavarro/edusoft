@@ -131,5 +131,9 @@ class Teacher_model
   {
     return $this->db->selectWhere($attributes, "student_activities", $where);
   }
+
+  public function getStudentResponses($attr, $where){
+    return $this->db->selectWhere($attr, 'student_responses', $where);
+  }
 }
 ?>

@@ -954,9 +954,9 @@ class Teacher {
       $estudiante = $this->model->studentInformation("*", "username='".$actividad['student']."'");
       echo '<td>'.$estudiante['lastName'].' '.$estudiante['name'].'</td>';
       if ($actividad['rating'] == NULL) {
-        echo '<td>AUN SIN RESOLVER</td>';
+        echo '<td>AUN SIN RESOLVER</td><td></td>';
       } else {
-        echo '<td>'.$actividad['rating'].'</td>';
+        echo '<td>'.$actividad['rating'].'</td><td><a href="'.URL.'Teacher/informeRespuestas/'.$id.'-'.$actividad['student'].'" target="_blank">ver examen</a></td>';
       }
       echo '</tr>';
     }
@@ -969,12 +969,27 @@ class Teacher {
       $act = $this->model->activityInformation("*", "id='".$actividad['activity']."'");
       echo '<td>'.$act['title'].'</td>';
       if ($actividad['rating'] == NULL) {
-        echo '<td>AUN SIN RESOLVER</td>';
+        echo '<td>AUN SIN RESOLVER</td><td></td>';
       } else {
-        echo '<td>'.$actividad['rating'].'</td>';
+        echo '<td>'.$actividad['rating'].'</td><td><a href="'.URL.'Teacher/informeRespuestas/'.$actividad['activity'].'-'.$id.'" target="_blank">ver examen</a></td>';
       }
       echo '</tr>';
     }
+  }
+
+  public function informeRespuestas($act_est) {
+    $act_est = explode("-", $act_est);
+    $act = $act_est[0];
+    $est = $act_est[1];
+    $estudiante = $this->model->studentInformation("*", "username='".$est."'");
+    $actividad = $this->model->activityInformation("*", "id='".$act."'");
+    $ejerciciosActividad = $this->model->activityExercisesInformation("*", "activity='".$act."'");
+    $todosEjercicios = $this->model->exercisesInformationOrder("*", "id");
+    $todasRespuestas= $this->model->responsesInformation("*", "1");
+    $answers = $this->model->getStudentResponses("*", "student='".$est."' AND activity='".$act."'");
+    require_once HEAD;
+    require_once VIEWS.'Teacher/revisar.php';
+    require_once FOOT;
   }
 }
 ?>

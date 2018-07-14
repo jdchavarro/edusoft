@@ -1,0 +1,20 @@
+section {
+  background-color: white;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  margin: -40px auto;
+  padding-bottom: 20px;
+  padding-top: 20px;
+  text-align: center;
+  width: 1050px;
+}
+.imgConcepto img {
+  width: 700px;
+}
+.completar {
+  width: 50px;
+}
+.select {
+  width: 250px;
+  margin: 0 auto;
+}

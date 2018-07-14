@@ -15,7 +15,7 @@ $("#selectActividad").change(function(){
     $.get("http://localhost/webalanta/edusoft/Teacher/informeActividad/"+opcion,
     function(data){
       var html = '<table class="table table-striped"><thead><tr class="table-primary">';
-      html += "<td>Estudiante</td><td>Nota</td>";
+      html += "<td>Estudiante</td><td>Nota</td><td>Opciones</td>";
       html += "</tr></thead>";
       html += '<tbody>';
       html += data;
@@ -31,7 +31,7 @@ $("#selectEstudiante").change(function(){
     $.get("http://localhost/webalanta/edusoft/Teacher/informeEstudiante/"+opcion,
     function(data){
       var html = '<table class="table table-striped"><thead><tr class="table-primary">';
-      html += "<td>Actividad</td><td>Nota</td>";
+      html += "<td>Actividad</td><td>Nota</td><td>Opciones</td>";
       html += "</tr></thead>";
       html += '<tbody>';
       html += data;
