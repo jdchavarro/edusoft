@@ -238,15 +238,16 @@ class Student {
     }
   }
 
-  public function asignar($grupo) {
-    $host_name = gethostname();
+  public function asignar() {
+    $grupo = $_POST['grupo'];
+    $ip = $_POST['ip'];
     $actividades = $this->model->getActivities("*", "grupo='".$grupo."'");
+
     foreach ($actividades as $key => $actividad) {
       $respuesta_computadores = $this->model->getComputers("*", "activity='".$actividad['id']."'");
       if ($respuesta_computadores != NULL) {
         foreach ($respuesta_computadores as $computer) {
-          if ($host_name == $computer['name']) {
-            $actividades_asignadas[$computer['activity']] = true;
+          if ($ip == $computer['name']) {
             unset($actividades[$key]);
           }
         }
@@ -255,32 +256,22 @@ class Student {
 
     require_once HEAD;
     require_once VIEWS.'Student/header.php';
+    
     if ($actividades != NULL) {
-      foreach ($actividades as $actividad) {
-        $actividades_de_los_estudiantes = $this->model->getActivitiesStudent("*", "activity='".$actividad['id']."'");
-        if ($actividades_de_los_estudiantes == NULL) {
-          $actividades_disponibles[] = $actividad['id'];
-        }
-      }
-      if ($actividades_disponibles != NULL) {
-        $activityID = $actividades_disponibles[0];
-        $atrr['activity'] = $activityID;
-        $atrr['name'] = gethostname();
-        $this->model->setComputers($atrr);
-        $atributo['activity'] = $activityID;
-        $atributo['student'] = Session::getSession("username");
-        $this->model->asignarEstudiante($atributo);
-        $actividad = $this->model->getActivities("*", "id='".$activityID."'")[0];
-        $ejerciciosActividad = $this->model->getExercisesActivity("*", "activity='".$activityID."'");
-        $todosEjercicios = $this->model->getExercises("*");
-        $todasRespuestas = $this->model->getResponses("*");
-        $conceptos = $this->model->getConceptos("*");
-        $estudiantes = $this->model->getStudents("*");
-        require_once VIEWS.'Student/resolver.php';
-      } else {
-        require_once VIEWS.'Student/error.php';  
-      }
-      
+      $activityID = reset($actividades)['id'];
+      $atrr['activity'] = $activityID;
+      $atrr['name'] = $ip;
+      $this->model->setComputers($atrr);
+      $atributo['activity'] = $activityID;
+      $atributo['student'] = Session::getSession("username");
+      $this->model->asignarEstudiante($atributo);
+      $actividad = $this->model->getActivities("*", "id='".$activityID."'")[0];
+      $ejerciciosActividad = $this->model->getExercisesActivity("*", "activity='".$activityID."'");
+      $todosEjercicios = $this->model->getExercises("*");
+      $todasRespuestas = $this->model->getResponses("*");
+      $conceptos = $this->model->getConceptos("*");
+      $estudiantes = $this->model->getStudents("*");
+      require_once VIEWS.'Student/resolver.php';
     } else {
       require_once VIEWS.'Student/error.php';
     }

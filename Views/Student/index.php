@@ -79,10 +79,22 @@ if ($actividades_del_estudiante != NULL) {
       foreach ($grupos_evaluaciones as $grupo => $after) {
         if ($after == NULL) {
           echo '<tr><td>Evaluacion Individual g'.$grupo.'</td>';
-          echo '<td><a href="'.URL.'Student/asignar/'.$grupo.'">RESOLVER</a></td></tr>';
+          echo '<td>';
+          echo '<form action="'.URL.'Student/asignar" method="POST">';
+          echo '<input type="hidden" id="ip" name="ip">';
+          echo '<input type="hidden" name="grupo" value="'.$grupo.'">';
+          echo '<input type="submit" value="RESOLVER">';
+          echo '</form>';
+          echo '</td></tr>';
         } elseif (isset($actividades_resueltas[$after])) {
           echo '<tr><td>Evaluacion Individual g'.$grupo.'</td>';
-          echo '<td><a href="'.URL.'Student/asignar/'.$grupo.'">RESOLVER</a></td></tr>';
+          echo '<td>';
+          echo '<form action="'.URL.'Student/asignar" method="POST">';
+          echo '<input type="hidden" id="ip" name="ip">';
+          echo '<input type="hidden" name="grupo" value="'.$grupo.'">';
+          echo '<input type="submit" value="RESOLVER">';
+          echo '</form>';
+          echo '</td></tr>';
         } else {
           echo '<tr><td>Evaluacion Individual g'.$grupo.'</td>';
           echo '<td>BLOQUEADA</td></tr>';
@@ -99,3 +111,4 @@ if ($actividades_del_estudiante != NULL) {
 </article>
 
 </section>
+<script src="<?php echo URL.VIEWS; ?>Student/js/index.js"></script>

@@ -6,3 +6,12 @@
   background-color: brown;
   color: white;
 }
+form input[type="submit"] {
+  color: blue;
+  background: none;
+  border: none;
+}
+form input[type="submit"]:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

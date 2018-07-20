@@ -1,4 +1,6 @@
-$("#opcion_de_busqueda").change(function(){
+const URL = 'http://localhost/webalanta/edusoft/';
+
+$("#opcion_de_busqueda").change(function () {
   var opcion = $("#opcion_de_busqueda option:selected").val();
   if (opcion == "student") {
     $("#estudiante").removeClass("oculto");
@@ -9,34 +11,34 @@ $("#opcion_de_busqueda").change(function(){
   }
 });
 
-$("#selectActividad").change(function(){
+$("#selectActividad").change(function () {
   var opcion = $("#selectActividad option:selected").val();
   if (opcion != "") {
-    $.get("http://localhost/webalanta/edusoft/Teacher/informeActividad/"+opcion,
-    function(data){
-      var html = '<table class="table table-striped"><thead><tr class="table-primary">';
-      html += "<td>Estudiante</td><td>Nota</td><td>Opciones</td>";
-      html += "</tr></thead>";
-      html += '<tbody>';
-      html += data;
-      html += '</tbody></table>';
-      $("#tablaActividad").html(html);
-    });
+    $.get(URL + "Teacher/informeActividad/" + opcion,
+      function (data) {
+        var html = '<table class="table table-striped"><thead><tr class="table-primary">';
+        html += "<td>Estudiante</td><td>Nota</td><td>Opciones</td>";
+        html += "</tr></thead>";
+        html += '<tbody>';
+        html += data;
+        html += '</tbody></table>';
+        $("#tablaActividad").html(html);
+      });
   }
 });
 
-$("#selectEstudiante").change(function(){
+$("#selectEstudiante").change(function () {
   var opcion = $("#selectEstudiante option:selected").val();
   if (opcion != "") {
-    $.get("http://localhost/webalanta/edusoft/Teacher/informeEstudiante/"+opcion,
-    function(data){
-      var html = '<table class="table table-striped"><thead><tr class="table-primary">';
-      html += "<td>Actividad</td><td>Nota</td><td>Opciones</td>";
-      html += "</tr></thead>";
-      html += '<tbody>';
-      html += data;
-      html += '</tbody></table>';
-      $("#tablaEstudiante").html(html);
-    });
+    $.get(URL + "Teacher/informeEstudiante/" + opcion,
+      function (data) {
+        var html = '<table class="table table-striped"><thead><tr class="table-primary">';
+        html += "<td>Actividad</td><td>Nota</td><td>Opciones</td>";
+        html += "</tr></thead>";
+        html += '<tbody>';
+        html += data;
+        html += '</tbody></table>';
+        $("#tablaEstudiante").html(html);
+      });
   }
 });
