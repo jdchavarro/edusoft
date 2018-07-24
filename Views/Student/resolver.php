@@ -39,7 +39,7 @@ if ($actividad['type'] == "actividad") {
       </div>
     </div>
   </div>
-  <?
+  <?php
 }
 echo '<form action="'.URL.'Student/revisar/'.$actividad["id"].'" method="POST" id="formulario">';
 echo '<div id="otrosEstudiantes">';
