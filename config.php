@@ -7,6 +7,6 @@ const DFT = 'Default/';
 const IMG = 'img/';
 const HEAD = VIEWS.DFT.'header.php';
 const FOOT = VIEWS.DFT.'footer.php';
-const URL = 'http://localhost/webalanta/edusoft/';
+const URL = 'http://192.168.1.58/webalanta/edusoft/';
 
 ?>
