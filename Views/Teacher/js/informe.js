@@ -1,4 +1,5 @@
-const URL = 'http://localhost/webalanta/edusoft/';
+/* const URL = 'http://localhost/webalanta/edusoft/'; */
+const URL = 'http://localhost/edusoft/';
 
 $("#opcion_de_busqueda").change(function () {
   var opcion = $("#opcion_de_busqueda option:selected").val();

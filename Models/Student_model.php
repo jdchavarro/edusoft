@@ -5,7 +5,7 @@ class Student_model
 
   function __construct() {
     require_once CTR.'QueryManager.php';
-    $this->db = new QueryManager("localhost", "root", "", "edusoft");
+    $this->db = new QueryManager("localhost", "root", "toor", "edusoft");
   }
 
   public function getActivities($attr, $where) {
